@@ -26,23 +26,27 @@ void setservo(String args){
 void do_commands(){
   digitalWrite(13, HIGH);
   Serial.println("Hello my name is otto, version 0.0.1");
+  Serial.readStringUntil('\n'); // Clear serial buffer
   Serial.setTimeout(5l*60l*1000l);
   while(true){
     Serial.print("enter command: "); 
     String line = Serial.readStringUntil('\n');
-    if(line.length()==0){continue;}
+    if(line.length()==0){
+      Serial.println();
+      continue;
+    }
     auto pos = line.indexOf(' ');
     if(pos<0){
-      Serial.println("could not find space in command.");
       pos = line.length();
     }
     String command = line.substring(0, pos);
-    Serial.print("command: ");
-    Serial.println(command);
+    Serial.print(command + " ");
     String args = "";
     if( (pos+1)<(line.length()) ){
       args = line.substring(pos+1, line.length());
+      Serial.println(args);
     }
+
 
     //TODO: replace with something better, hash map?
     if(command=="ping"){
@@ -55,9 +59,5 @@ void do_commands(){
     }
     
   }
-  //loop: read line
-  //parse line(command)
-  //call command with rest of parameters
-  //command does the stuff
 }
  
