@@ -3,6 +3,7 @@
 bool is_debug(){
   Serial.begin(9600);
   while(!Serial){}
+  beep();
   delay(2000);
   return Serial.available();
 }

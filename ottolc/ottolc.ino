@@ -4,6 +4,7 @@
 
 void setup() {
   init_movement();
+  initBuzzer();
   // put your setup code here, to run once:
   if(is_debug()){
     do_commands();
