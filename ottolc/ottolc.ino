@@ -2,18 +2,19 @@
 
 */
 
+// changable by sending some data via serial during the first 2 seconds after servo reset
+bool debug_mode = false;
+
 void setup() {
   initMovement();
   initBuzzer();
-  // put your setup code here, to run once:
-  if(is_debug()){
-    do_commands();
-  }else{
-    dance();
-  }
+  debug_mode = isDebug();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-
+  if(debug_mode){
+    doCommands();
+  }else{
+    dance();
+  }
 }

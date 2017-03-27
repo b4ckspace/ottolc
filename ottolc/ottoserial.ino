@@ -1,6 +1,6 @@
 // this file manages serial communications and command dispatch for debug&adjustment purposes
 #include <stdio.h>
-bool is_debug(){
+bool isDebug(){
   Serial.begin(9600);
   while(!Serial){}
   beep();
@@ -24,7 +24,7 @@ void setservo(String args){
   Serial.println("Ok");
 }
 
-void do_commands(){
+void doCommands(){
   digitalWrite(13, HIGH);
   Serial.println("Hello my name is otto, version 0.0.1");
   Serial.readStringUntil('\n'); // Clear serial buffer
