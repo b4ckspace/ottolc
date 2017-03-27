@@ -14,19 +14,24 @@
 
 Oscillator servo[N_SERVOS];
 
-void walk(int steps, int T=1000);
 
-void init_movement(){
+void initMovement(){
   servo[0].attach(PIN_RR);
   servo[1].attach(PIN_RL);
   servo[2].attach(PIN_YR);
   servo[3].attach(PIN_YL);
+  resetServos();
+}
+
+void resetServos(){
   servo[0].SetTrim(0);
   servo[1].SetTrim(0);
   servo[2].SetTrim(0);
   servo[3].SetTrim(0);
-  
-  for(int i=0;i<4;i++) servo[i].SetPosition(90);
+  for(int i=0;i<4;i++){
+    delay(100);
+    servo[i].SetPosition(90);
+  }
 }
 
 void dance(){

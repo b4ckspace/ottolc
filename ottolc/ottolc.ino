@@ -3,7 +3,7 @@
 */
 
 void setup() {
-  init_movement();
+  initMovement();
   initBuzzer();
   // put your setup code here, to run once:
   if(is_debug()){

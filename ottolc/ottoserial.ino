@@ -54,6 +54,9 @@ void do_commands(){
       Serial.println("pong!");
     }else if(command=="setservo"){
       setservo(args);
+    }else if(command=="resetservos"){
+      resetServos();
+      Serial.println("servos reseted");
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
