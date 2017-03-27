@@ -86,11 +86,14 @@ void doCommands(){
     }else if(command=="resetservos"){
       resetServos();
       Serial.println("servos reseted");
+    }else if(command=="beep"){
+      beep();
     }else if(command=="settrim"){
       setTrim(args);
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
+      beep();
     }
     
   }
