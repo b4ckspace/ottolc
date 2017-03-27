@@ -1,11 +1,6 @@
 #include <EEPROM.h>
 
-enum class Setting{
-  trimLeftFoot,
-  trimRightFoot,
-  trimLeftLeg,
-  trimRightLeg,
-};
+#include "enums.h"
 
 // this is required as it will not build in more recent arduino versions
 // as they add all function prototypes at the beginning and the 

@@ -6,6 +6,8 @@
 bool debug_mode = false;
 
 void setup() {
+  Serial.begin(9600);
+  while(!Serial){}
   initMovement();
   initBuzzer();
   debug_mode = isDebug();

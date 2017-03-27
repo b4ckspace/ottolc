@@ -1,14 +1,12 @@
 // this file manages serial communications and command dispatch for debug&adjustment purposes
 #include <stdio.h>
 bool isDebug(){
-  Serial.begin(9600);
-  while(!Serial){}
   beep();
   delay(2000);
   return Serial.available();
 }
 
-void setservo(String args){
+void setServo(String args){
   Serial.println("setting a servo");
   int servonr;
   int degree;
@@ -21,6 +19,37 @@ void setservo(String args){
     return;
   }
   servo[servonr].SetPosition(degree);
+  Serial.println("Ok");
+}
+
+void setTrim(String args){
+  Serial.println("setting servo trim");
+  int servonr;
+  int trimvalue;
+  int matches = sscanf(args.c_str(), "%d %d", &servo, &trimvalue);
+  if(matches!=2){
+    Serial.print(matches);
+    Serial.print("could not parse arguments: '");
+    Serial.print(args);
+    Serial.println("'");
+    return;
+  }
+  EServo servo;
+  switch(servonr){
+    case 0:
+      servo = rightFoot; break;
+    case 1:
+      servo = leftFoot; break;
+    case 2:
+      servo = rightLeg; break;
+    case 3:
+      servo = leftLeg; break;
+    default:
+      Serial.print("Unknknown servo nr ");
+      Serial.println(servonr, DEC);
+    break;
+  }
+  setTrimdata(servo, trimvalue);
   Serial.println("Ok");
 }
 
@@ -53,10 +82,12 @@ void doCommands(){
     if(command=="ping"){
       Serial.println("pong!");
     }else if(command=="setservo"){
-      setservo(args);
+      setServo(args);
     }else if(command=="resetservos"){
       resetServos();
       Serial.println("servos reseted");
+    }else if(command=="settrim"){
+      setTrim(args);
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
