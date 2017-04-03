@@ -2,6 +2,7 @@
 #include <stdio.h>
 bool isDebug(){
   beep();
+  return true;
   delay(2000);
   return Serial.available();
 }
@@ -24,9 +25,9 @@ void setServo(String args){
 
 void setTrim(String args){
   Serial.println("setting servo trim");
-  int servonr;
-  int trimvalue;
-  int matches = sscanf(args.c_str(), "%d %d", &servo, &trimvalue);
+  int servonr=-1;
+  int trimvalue=-1;
+  int matches = sscanf(args.c_str(), "%d %d", &servonr, &trimvalue);
   if(matches!=2){
     Serial.print(matches);
     Serial.print("could not parse arguments: '");
@@ -34,6 +35,9 @@ void setTrim(String args){
     Serial.println("'");
     return;
   }
+  Serial.print("setting servo to: ");
+  Serial.print(servonr);
+  Serial.println(trimvalue);
   EServo servo;
   switch(servonr){
     case 0:
@@ -51,6 +55,14 @@ void setTrim(String args){
   }
   setTrimdata(servo, trimvalue);
   Serial.println("Ok");
+}
+
+void trimTest(){
+  for(int i=0;i<4;i++){
+    servo[i].SetPosition(60);
+  }
+  delay(500);
+  resetServos();
 }
 
 void doCommands(){
@@ -88,6 +100,8 @@ void doCommands(){
       Serial.println("servos reseted");
     }else if(command=="beep"){
       beep();
+    }else if(command=="trimtest"){
+      trimtest();
     }else if(command=="settrim"){
       setTrim(args);
     }else{
