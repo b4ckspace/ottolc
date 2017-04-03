@@ -7,6 +7,7 @@ bool isDebug(){
   return Serial.available();
 }
 
+int testvars[10] = {0,0,0,0,0,0,0,0,0,0};
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
@@ -39,6 +40,23 @@ void replSetServo(String args){
   setServo(servo, degree);
   Serial.println("Ok");
 }
+
+void setTVar(String args){
+  Serial.println("setting testvar");
+  int varnr;
+  int value;
+  int matches = sscanf(args.c_str(), "%d %d", &varnr, &value);
+  if(matches!=2){
+    Serial.print(matches);
+    Serial.print("could not parse arguments: '");
+    Serial.print(args);
+    Serial.println("'");
+    return;
+  }
+  testvars[varnr] = value;
+  Serial.println("Ok");
+}
+
 
 void replSetTrim(String args){
   Serial.println("setting servo trim");
@@ -121,6 +139,10 @@ void doCommands(){
       replTrimtest();
     }else if(command=="settrim"){
       replSetTrim(args);
+    }else if(command=="dancetest"){
+      dancetest();
+    }else if(command=="s"){
+      setTVar(args);
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
