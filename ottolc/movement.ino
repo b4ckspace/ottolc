@@ -13,6 +13,7 @@
 #define PIN_YL 2
 
 Oscillator servo[N_SERVOS];
+int servopos[N_SERVOS];
 
 void resetServos();
 void verifyTrimdata();
@@ -33,12 +34,9 @@ void resetServos(){
   servo[1].SetTrim(readSetting(trimLeftFoot));
   servo[2].SetTrim(readSetting(trimRightLeg));
   servo[3].SetTrim(readSetting(trimLeftLeg));
-  for(int i=0;i<4;i++){
-    servo[i].SetPosition(89);
-  }
-  delay(100);
-  for(int i=0;i<4;i++){
+  for(int i=0;i<N_SERVOS;i++){
     servo[i].SetPosition(90);
+    servopos[i]=90;
   }
 }
 
@@ -53,7 +51,18 @@ void dance(){
   }
 }
 
-
+void setServo(EServo servon, int value);
+void setServo(EServo servon, int value){
+  int idx;
+  switch(servon){
+    case rightFoot: idx=0;break;
+    case leftFoot:  idx=1;break;
+    case rightLeg:  idx=2;break;
+    case leftLeg:   idx=3;break;
+  }
+  servo[idx].SetPosition(value);
+  servopos[idx]= value;
+}
 
 void verifyTrimdata(){
   char a = readSetting(trimLeftFoot);

@@ -7,6 +7,8 @@ bool isDebug(){
   return Serial.available();
 }
 
+
+void setServo(EServo servo, int value);
 void replSetServo(String args){
   Serial.println("setting a servo");
   int servonr;
@@ -19,7 +21,22 @@ void replSetServo(String args){
     Serial.println("'");
     return;
   }
-  servo[servonr].SetPosition(degree);
+  EServo servo;
+  switch(servonr){
+    case 0:
+      servo = rightFoot; break;
+    case 1:
+      servo = leftFoot; break;
+    case 2:
+      servo = rightLeg; break;
+    case 3:
+      servo = leftLeg; break;
+    default:
+      Serial.print("Unknknown servo nr ");
+      Serial.println(servonr, DEC);
+    break;
+  }
+  setServo(servo, degree);
   Serial.println("Ok");
 }
 
