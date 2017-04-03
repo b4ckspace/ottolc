@@ -7,7 +7,7 @@ bool isDebug(){
   return Serial.available();
 }
 
-void setServo(String args){
+void replSetServo(String args){
   Serial.println("setting a servo");
   int servonr;
   int degree;
@@ -23,7 +23,7 @@ void setServo(String args){
   Serial.println("Ok");
 }
 
-void setTrim(String args){
+void replSetTrim(String args){
   Serial.println("setting servo trim");
   int servonr=-1;
   int trimvalue=-1;
@@ -57,7 +57,7 @@ void setTrim(String args){
   Serial.println("Ok");
 }
 
-void trimTest(){
+void replTrimtest(){
   for(int i=0;i<4;i++){
     servo[i].SetPosition(60);
   }
@@ -94,16 +94,16 @@ void doCommands(){
     if(command=="ping"){
       Serial.println("pong!");
     }else if(command=="setservo"){
-      setServo(args);
+      replSetServo(args);
     }else if(command=="resetservos"){
       resetServos();
       Serial.println("servos reseted");
     }else if(command=="beep"){
       beep();
     }else if(command=="trimtest"){
-      trimtest();
+      replTrimtest();
     }else if(command=="settrim"){
-      setTrim(args);
+      replSetTrim(args);
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
