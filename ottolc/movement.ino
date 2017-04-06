@@ -64,6 +64,18 @@ void setServo(EServo servon, int value){
   servopos[idx]= value;
 }
 
+int getServo(EServo servon);
+int getServo(EServo servon){
+  int idx;
+  switch(servon){
+    case rightFoot: idx=0;break;
+    case leftFoot:  idx=1;break;
+    case rightLeg:  idx=2;break;
+    case leftLeg:   idx=3;break;
+  }
+  return servopos[idx];
+}
+
 void verifyTrimdata(){
   char a = readSetting(trimLeftFoot);
   char b = readSetting(trimRightFoot);
