@@ -14,7 +14,7 @@ char readSetting(Setting key){
 void writeSetting(Setting key, char value);
 void writeSetting(Setting key, char value){
   Serial.print("writing to settings ");
-  Serial.print(int(key), DEC);
+  Serial.print(int(key));
   Serial.print(" ");
   Serial.println(value, DEC);
   EEPROM.write(int(key), value);

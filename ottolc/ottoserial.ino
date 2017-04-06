@@ -139,8 +139,9 @@ void doCommands(){
       replTrimtest();
     }else if(command=="settrim"){
       replSetTrim(args);
+      replTrimtest();
     }else if(command=="dancetest"){
-      dancetest();
+      // dancetest();
     }else if(command=="s"){
       setTVar(args);
     }else{
