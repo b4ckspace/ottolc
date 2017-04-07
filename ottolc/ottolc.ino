@@ -10,6 +10,7 @@ void setup() {
   while(!Serial){}
   initMovement();
   initBuzzer();
+  initAnim();
   debug_mode = isDebug();
 }
 

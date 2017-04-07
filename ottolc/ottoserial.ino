@@ -7,14 +7,14 @@ bool isDebug(){
   return Serial.available();
 }
 
-int testvars[10] = {0,0,0,0,0,0,0,0,0,0};
+int testvars[10] = {10,500,500,0,0,0,0,0,0,0};
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
   Serial.println("setting a servo");
   int servonr;
   int degree;
-  int matches = sscanf(args.c_str(), "%d %d", &servo, &degree);
+  int matches = sscanf(args.c_str(), "%d %d", &servonr, &degree);
   if(matches!=2){
     Serial.print(matches);
     Serial.print("could not parse arguments: '");
@@ -100,6 +100,22 @@ void replTrimtest(){
   resetServos();
 }
 
+void replPrintServos(){
+  Serial.println("");
+  Serial.print("rightFoot = ");
+  Serial.print(getServo(rightFoot));
+  Serial.println(";");
+  Serial.print("leftFoot = ");
+  Serial.print(getServo(leftFoot));
+  Serial.println(";");
+  Serial.print("rightLeg = ");
+  Serial.print(getServo(rightLeg));
+  Serial.println(";");
+  Serial.print("leftLeg = ");
+  Serial.print(getServo(leftLeg));
+  Serial.println(";");
+}
+
 void doCommands(){
   digitalWrite(13, HIGH);
   Serial.println("Hello my name is otto, version 0.0.1");
@@ -137,13 +153,22 @@ void doCommands(){
       beep();
     }else if(command=="trimtest"){
       replTrimtest();
+    }else if(command=="animtest"){
+      animtest();
     }else if(command=="settrim"){
       replSetTrim(args);
       replTrimtest();
-    }else if(command=="dancetest"){
-      // dancetest();
+    }else if(command=="printservos"||command=="ps"){
+      replPrintServos();
     }else if(command=="s"){
+      sanimstep();
+    }else if(command=="w"){
+      sanimSetup();
+    }else if(command=="tset"){
       setTVar(args);
+    }else if(command=="reset"){
+      void(* resetFunc) (void) = 0;
+      resetFunc();
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
@@ -153,3 +178,96 @@ void doCommands(){
   }
 }
  
+
+void animtest(){
+  Serial.println("start anim test");
+  AnimKeyframe kf;
+
+  kf.rightFoot=90;
+  kf.leftFoot=90;
+  kf.duration=500;
+  queueFrame(kf);
+
+  kf.duration=1000;
+
+  kf.rightFoot = 50;
+  kf.leftFoot = 60;
+  kf.rightLeg = 90;
+  kf.leftLeg = 90;
+  // kf.duration=testvars[;
+  queueFrame(kf);
+  kf.leftFoot = 60;
+  kf.duration = 500;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot=90;
+  kf.leftFoot=90;
+  kf.duration=500;
+  queueFrame(kf);
+
+
+  while(!AnimEndReached()){
+    AnimStep(testvars[0]);
+    delay(testvars[0]);
+  }
+
+  Serial.println("end anim test");
+}
+
+void sanimSetup(){
+  Serial.println("qing");
+  AnimKeyframe kf;
+
+  kf.rightFoot=90;
+  kf.leftFoot=90;
+  kf.duration=500;
+  queueFrame(kf);
+
+  kf.duration=500;
+
+  kf.rightFoot = 50;
+  kf.leftFoot = 70;
+  kf.rightLeg = 90;
+  kf.leftLeg = 90;
+  // kf.duration=testvars[;
+  queueFrame(kf);
+  kf.leftFoot = 60;
+  kf.duration = 300;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot = 130;
+  queueFrame(kf);
+  kf.rightFoot = 60;
+  queueFrame(kf);
+  kf.rightFoot=90;
+  kf.leftFoot=90;
+  kf.duration=500;
+  queueFrame(kf);
+
+}
+void sanimstep(){
+  if(!AnimEndReached()){
+    AnimStep(testvars[0]);
+    Serial.println("ok");
+  }else{
+    Serial.println("end anim test");
+  }
+}

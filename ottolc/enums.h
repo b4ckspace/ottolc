@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h>
 enum Setting{
   trimLeftFoot,
   trimRightFoot,
@@ -13,4 +14,12 @@ enum EServo{
 	leftFoot,
 	rightLeg,
 	leftLeg,
+};
+
+struct __attribute__((packed)) AnimKeyframe{
+	uint8_t leftFoot = 90;
+	uint8_t rightFoot = 90;
+	uint8_t leftLeg = 90;
+	uint8_t rightLeg = 90;
+	int16_t duration = 1000; //duration in ms
 };

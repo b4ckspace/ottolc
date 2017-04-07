@@ -53,20 +53,35 @@ void dance(){
 
 void setServo(EServo servon, int value);
 void setServo(EServo servon, int value){
-  int idx;
+  int idx=-1;
   switch(servon){
     case rightFoot: idx=0;break;
     case leftFoot:  idx=1;break;
     case rightLeg:  idx=2;break;
     case leftLeg:   idx=3;break;
+    default:Serial.println("could not match servo in setservo oO");break;
   }
+  if(value<40 || value > 140 ){
+    Serial.print("preventing bad servo value ");
+    Serial.print(idx);
+    Serial.print(" ");
+    Serial.println(value);
+    return;
+  }
+  /*
+  Serial.print("Set servo: ");
+  Serial.print(idx);
+  Serial.print(" ");
+  Serial.println(value);
+  //*/
+  
   servo[idx].SetPosition(value);
-  servopos[idx]= value;
+  servopos[idx] = value;
 }
 
 int getServo(EServo servon);
 int getServo(EServo servon){
-  int idx;
+  int idx=-1;
   switch(servon){
     case rightFoot: idx=0;break;
     case leftFoot:  idx=1;break;
