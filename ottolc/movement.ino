@@ -41,14 +41,12 @@ void resetServos(){
 }
 
 void dance(){
-  while(true){
     servo[0].SetPosition(50);
     servo[1].SetPosition(50);
     delay(500);
     servo[0].SetPosition(100);
     servo[1].SetPosition(100);
     delay(500);
-  }
 }
 
 void setServo(EServo servon, int value);
