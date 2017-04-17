@@ -2,7 +2,6 @@
 #include <stdio.h>
 bool isDebug(){
   beep();
-  return true;
   delay(2000);
   return Serial.available();
 }
