@@ -1,7 +1,7 @@
 // this file manages serial communications and command dispatch for debug&adjustment purposes
 #include <stdio.h>
 bool isDebug(){
-  beep();
+  //beep();
   return true;
   delay(2000);
   return Serial.available();
@@ -137,7 +137,6 @@ void doCommands(){
     String args = "";
     if( (pos+1)<(line.length()) ){
       args = line.substring(pos+1, line.length());
-      Serial.println(args);
     }
 
 
@@ -153,8 +152,12 @@ void doCommands(){
       beep();
     }else if(command=="trimtest"){
       replTrimtest();
-    }else if(command=="animtest"){
-      animtest();
+    }else if(command=="play"){
+      splayAnim();
+    }else if(command=="q1"){
+      anim1();
+    }else if(command=="q2"){
+      anim2();
     }else if(command=="settrim"){
       replSetTrim(args);
       replTrimtest();
@@ -169,6 +172,8 @@ void doCommands(){
     }else if(command=="reset"){
       void(* resetFunc) (void) = 0;
       resetFunc();
+    }else if(command=="!"){
+      apiCommand(args);
     }else{
       Serial.print("command not found: ");
       Serial.println(command);
@@ -177,9 +182,90 @@ void doCommands(){
     
   }
 }
- 
 
-void animtest(){
+// this seperate function should be used for commands that are used by tools and should not change their interface
+// commands sould return a non 0 value on error and a message 
+#define PBUFSZ 200
+char printbuf[PBUFSZ];
+
+void apiCommand(String line){
+  Serial.println();
+  int returncode=0;
+  String result="";
+  
+  if(line.length()==0){
+    returncode = -1;
+    result = "empty api command";
+    goto printres;
+  }
+
+
+  {
+    auto pos = line.indexOf(' ');
+    String args = "";
+    if(pos<0){
+      pos = line.length();
+    }
+    String command = line.substring(0, pos);
+    //Serial.print("xxx"+command + "xxx ");
+    
+    if( (pos+1)<(line.length()) ){
+      args = line.substring(pos+1, line.length());
+    }
+    if(command=="ping"){
+      result="pong";
+    }else if(command=="apiversion"){
+      result="0001";
+    }else if(command=="gettrims"){
+      char getTrimdata(EServo servo);
+      memset(printbuf,0,PBUFSZ);
+      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", getTrimdata(rightFoot), getTrimdata(leftFoot), getTrimdata(rightLeg), getTrimdata(leftLeg));
+      result=printbuf;
+    }else if(command=="settrims"){
+      int a,b,c,d;
+      Serial.println(args);
+      if(sscanf(args.c_str(), "%d %d %d %d", &a, &b, &c, &d)!=4){
+        returncode = -1;
+        result="could not parse format";
+      }else{
+        setTrimdata(rightFoot, a);
+        setTrimdata(leftFoot, b);
+        setTrimdata(rightLeg, c);
+        setTrimdata(leftLeg, d);
+        result="trim data set";
+      }
+    }else if(command=="getservos"){
+      int getServo(EServo servo);
+      memset(printbuf,0,PBUFSZ);
+      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", getServo(rightFoot), getServo(leftFoot), getServo(rightLeg), getServo(leftLeg));
+      result=printbuf;
+    }else if(command=="setservos"){
+      int a,b,c,d;
+      Serial.println(args);
+      if(sscanf(args.c_str(), "%d %d %d %d", &a, &b, &c, &d)!=4){
+        returncode = -1;
+        result="could not parse format";
+      }else{
+        setServo(rightFoot, a);
+        setServo(leftFoot, b);
+        setServo(rightLeg, c);
+        setServo(leftLeg, d);
+        result="servos set";
+      }
+    }else{
+      returncode = -1;
+      result = "command not found";
+    }
+  }
+
+
+  printres:
+  memset(printbuf,0,PBUFSZ);
+  snprintf(printbuf, PBUFSZ, "%d %s\n", returncode, result.c_str());
+  Serial.print(printbuf);
+}
+
+void anim1(){
   Serial.println("start anim test");
   AnimKeyframe kf;
 
@@ -215,8 +301,56 @@ void animtest(){
   kf.leftFoot=90;
   kf.duration=500;
   queueFrame(kf);
+}
+
+void anim2(){
+  AnimKeyframe kf;
+
+  kf.rightFoot=90;
+  kf.leftFoot=90;
+  kf.duration=1;
+  queueFrame(kf);
+
+  kf.leftFoot=70;
+  kf.duration=100;
+  queueFrame(kf);
+
+  kf.rightFoot=50;
+  kf.duration=100;
+  queueFrame(kf);
+
+  kf.leftFoot=50;
+  queueFrame(kf);
+
+  kf.rightFoot=100;
+  kf.duration=100;
+  queueFrame(kf);
+  kf.rightFoot=80;
+  kf.duration=100;
+  queueFrame(kf);
+
+  kf.duration=200;
+  queueFrame(kf);
 
 
+  kf.rightFoot=100;
+  kf.duration=300;
+  kf.duration=300;
+  queueFrame(kf);
+  kf.rightFoot=70;
+  queueFrame(kf);
+  kf.rightFoot=110;
+  queueFrame(kf);
+  kf.rightFoot=70;
+  queueFrame(kf);
+  kf.rightFoot=110;
+  queueFrame(kf);
+  kf.rightFoot=70;
+  queueFrame(kf);
+}
+
+
+void splayAnim(){
   while(!AnimEndReached()){
     AnimStep(testvars[0]);
     delay(testvars[0]);

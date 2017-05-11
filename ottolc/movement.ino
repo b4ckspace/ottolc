@@ -137,6 +137,12 @@ void setTrimdata(EServo servo, char trimval){
   writeSetting(trimChecksum, chk);
 }
 
+char getTrimdata(EServo servo);
+char getTrimdata(EServo servo){
+  auto setting = servoToTrimSetting(servo);
+  return readSetting(setting);
+}
+
 // TODO: replace with something good
 char badChecksum(char* data, size_t len){
   char ret = 2;
