@@ -252,6 +252,28 @@ void apiCommand(String line){
         setServo(leftLeg, d);
         result="servos set";
       }
+    }else if(command=="pushframe"){
+      int a,b,c,d,t;
+      Serial.println(args);
+      if(sscanf(args.c_str(), "%d %d %d %d %d", &a, &b, &c, &d, &t)!=5){
+        returncode = -1;
+        result="could not parse format";
+      }else{
+        void queueFrame(AnimKeyframe frame);
+        AnimKeyframe kf;
+        kf.rightFoot=a;
+        kf.leftFoot=b;
+        kf.rightLeg=c;
+        kf.leftLeg=d;
+        kf.duration=t;
+        queueFrame(kf);
+        result="frame added";
+      }
+    }else if(command=="playanim"){
+      while(!AnimEndReached()){
+        AnimStep(testvars[0]);
+        delay(testvars[0]);
+      }
     }else{
       returncode = -1;
       result = "command not found";

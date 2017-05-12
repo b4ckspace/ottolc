@@ -61,7 +61,8 @@ void setServo(EServo servon, int value){
     case leftLeg:   idx=3;break;
     default:Serial.println("could not match servo in setservo oO");break;
   }
-  if(value<40 || value > 140 ){
+  if(value<0 || value > 180 ){
+  // if(value<40 || value > 140 ){
     Serial.print("preventing bad servo value ");
     Serial.print(idx);
     Serial.print(" ");
