@@ -83,6 +83,19 @@ void AnimStep(int16_t ms){
     }
 }
 
+void resetAnimation(){
+    rhead = whead -1;
+    if(rhead < frames){
+        rhead = &frames[ARBSIZE-1];
+    }
+    rhead->duration=1;
+    rhead->rightFoot=90;
+    rhead->leftFoot=90;
+    rhead->rightLeg=90;
+    rhead->leftLeg=90;
+    animend=true;
+}
+
 inline bool AnimEndReached(){
     return animend;
 }
