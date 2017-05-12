@@ -53,14 +53,6 @@ void AnimStep(int16_t ms){
     uint16_t endtime = min(animPos+ms, rhead->duration);
     float factor = float(endtime) / float(rhead->duration);
 
-    /*
-    setServo(rightFoot, startpos.rightFoot + int16_t(round( (float(rhead->rightFoot)-float(startpos.rightFoot))*factor)) );
-    Serial.print("anim step ");
-    Serial.print(startpos.rightFoot);
-    Serial.print(" ");
-    Serial.print(rhead->rightFoot);
-    //*/
-
     setServo(rightFoot, startpos.rightFoot + int16_t(round( (float(rhead->rightFoot)-float(startpos.rightFoot))*factor)) );
     setServo(leftFoot,  startpos.leftFoot  + int16_t(round( (float(rhead->leftFoot) -float(startpos.leftFoot)) *factor)) );
     setServo(rightLeg,  startpos.rightLeg  + int16_t(round( (float(rhead->rightLeg) -float(startpos.rightLeg)) *factor)) );
