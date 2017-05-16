@@ -1,7 +1,8 @@
 import tkinter
 import serial
 from datetime import datetime, timedelta
-
+from tkinter.filedialog import asksaveasfilename, askopenfilename
+import json
 
 class App():
     def __init__(self, master, use_serial):
@@ -71,8 +72,21 @@ class App():
             row=0,
             column=3)
 
+        tkinter.Button(
+            master,
+            text="save",
+            command=self.save).grid(
+            row=2,
+            column=4)
+        tkinter.Button(
+            master,
+            text="load",
+            command=self.load).grid(
+            row=3,
+            column=4)
+
         self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
-        self.framelist.grid(row=0, column=4, rowspan=3)
+        self.framelist.grid(row=0, column=4, rowspan=2)
         for i in range(20):
             self.framelist.insert(tkinter.END, str(i))
 
@@ -113,7 +127,24 @@ class App():
     def deleteselection(self):
         for i in reversed(self.framelist.curselection()):
             self.framelist.delete(i)
+
+
+    def save(self):
+        savepath = asksaveasfilename(defaultextension=".json")
+        if not savepath:
+            return
+        with open(savepath, "w") as f:
+            json.dump(self.framelist.get(0, tkinter.END),f)
         
+    def load(self):
+        loadpath = askopenfilename(filetypes=[("Json file","*.json")])
+        if not loadpath:
+            return
+        with open(loadpath, "r") as f:
+            obj = json.load(f)
+            self.framelist.delete(0, tkinter.END)
+            for e in obj:
+                self.framelist.insert(tkinter.END, e)
 
     def resetServos(self):
         self.nosend = True
