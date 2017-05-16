@@ -214,6 +214,8 @@ void apiCommand(String line){
     }
     if(command=="ping"){
       result="pong";
+    }else if(command=="maxframes"){
+      result=ARBSIZE;
     }else if(command=="apiversion"){
       result="0001";
     }else if(command=="gettrims"){
@@ -269,10 +271,9 @@ void apiCommand(String line){
         queueFrame(kf);
         result="frame added";
       }
-    else if(command=="resetanim"){
+    }else if(command=="resetanim"){
       result = "animation cleared";
       resetAnimation();
-    }
     }else if(command=="playanim"){
       while(!AnimEndReached()){
         AnimStep(testvars[0]);
