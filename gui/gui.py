@@ -92,8 +92,6 @@ class App():
 
         self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
         self.framelist.grid(row=0, column=4, rowspan=2)
-        for i in range(20):
-            self.framelist.insert(tkinter.END, str(i))
 
         self.nosend = False
         self.mov(None)
