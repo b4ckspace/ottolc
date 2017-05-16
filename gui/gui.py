@@ -3,13 +3,18 @@ import serial
 from datetime import datetime, timedelta
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import json
+import sys
+
 
 class App():
-    def __init__(self, master, use_serial):
-        self.use_serial = use_serial
+    def __init__(self, master, serial_device=None):
+        if serial_device:
+            self.ser = serial.Serial(serial_device)
+            self.use_serial = True
+        else:
+            self.use_serial = False
         self.nosend = True
-        if self.use_serial:
-            self.ser = serial.Serial('/dev/ttyUSB0')
+            
         frame = tkinter.Frame(master)
         self.lastsend = datetime.now()
 
@@ -161,8 +166,11 @@ class App():
         else:
             print(cmd[0:-1])
 
-
-root = tkinter.Tk()
-root.configure()
-app = App(root, True)
-root.mainloop()
+if __name__ == "__main__":
+    root = tkinter.Tk()
+    root.configure()
+    if len(sys.argv)>1:
+        app = App(root, sys.argv[1])
+    else:
+        app = App(root)
+    root.mainloop()
