@@ -69,12 +69,6 @@ void setServo(EServo servon, int value){
     Serial.println(value);
     return;
   }
-  /*
-  Serial.print("Set servo: ");
-  Serial.print(idx);
-  Serial.print(" ");
-  Serial.println(value);
-  //*/
   
   servo[idx].SetPosition(value);
   servopos[idx] = value;

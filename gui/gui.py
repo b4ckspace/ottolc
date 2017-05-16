@@ -49,15 +49,32 @@ class App():
         tkinter.Button(
             master,
             text="add frame",
-            command=self.sendanim).grid(
-            row=0,
-            column=3)
+            command=self.addframe).grid(
+            row=2,
+            column=2)
         tkinter.Button(
             master,
             text="play anim",
             command=self.playanim).grid(
             row=1,
             column=3)
+        tkinter.Button(
+            master,
+            text="play selection",
+            command=self.playanimsel).grid(
+            row=2,
+            column=3)
+        tkinter.Button(
+            master,
+            text="delete selection",
+            command=self.deleteselection).grid(
+            row=0,
+            column=3)
+
+        self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
+        self.framelist.grid(row=0, column=4, rowspan=3)
+        for i in range(20):
+            self.framelist.insert(tkinter.END, str(i))
 
         self.nosend = False
         self.mov(None)
@@ -74,13 +91,29 @@ class App():
             self.rf.get(), self.lf.get(), self.rl.get(), self.ll.get())
         self._sendcmd(cmdstr)
 
-    def sendanim(self):
-        cmdstr = "! pushframe %d %d %d %d %d\n" % (
+    def addframe(self):
+        cmd = "%d %d %d %d %d" % (
             self.rf.get(), self.lf.get(), self.rl.get(), self.ll.get(), self.ts.get())
-        self._sendcmd(cmdstr)
+        self.framelist.insert(tkinter.END, cmd)
 
     def playanim(self):
+        self._sendandplayanim(self.framelist.get(0, tkinter.END))
+
+    def playanimsel(self):
+        if len(self.framelist.curselection())==0:
+            return
+        self._sendandplayanim([self.framelist.get(0, tkinter.END)[i] for i in self.framelist.curselection()])
+
+    def _sendandplayanim(self, animlist):
+        self._sendcmd("! resetanim\n" )
+        for i in animlist:
+            self._sendcmd("! pushframe %s\n"%(i,))
         self._sendcmd("! playanim\n")
+
+    def deleteselection(self):
+        for i in reversed(self.framelist.curselection()):
+            self.framelist.delete(i)
+        
 
     def resetServos(self):
         self.nosend = True

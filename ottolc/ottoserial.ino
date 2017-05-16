@@ -269,6 +269,10 @@ void apiCommand(String line){
         queueFrame(kf);
         result="frame added";
       }
+    else if(command=="resetanim"){
+      result = "animation cleared";
+      resetAnimation();
+    }
     }else if(command=="playanim"){
       while(!AnimEndReached()){
         AnimStep(testvars[0]);
