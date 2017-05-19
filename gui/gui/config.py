@@ -12,6 +12,6 @@ class Configtab():
         self.servocb.select()
     def servos(self, _w = None):
     	if self.cbvar.get():
-    		self.app._sendcmd("! servosoff\n")
-    	else:
     		self.app._sendcmd("! servoson\n")
+    	else:
+    		self.app._sendcmd("! servosoff\n")
