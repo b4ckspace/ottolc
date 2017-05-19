@@ -21,5 +21,5 @@ struct __attribute__((packed)) AnimKeyframe{
 	uint8_t rightFoot = 90;
 	uint8_t leftLeg = 90;
 	uint8_t rightLeg = 90;
-	int16_t duration :11; //duration in ms
+	int16_t duration; //duration in ms
 };

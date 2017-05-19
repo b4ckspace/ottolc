@@ -2,6 +2,7 @@
 #include <string.h>
 
 #define ARBSIZE 20
+//TODO: add special frame with function pointer to a fucntion that prepends 
 
 AnimKeyframe frames[ARBSIZE];
 AnimKeyframe *rhead;
@@ -15,7 +16,7 @@ void initAnim(){
     rhead = &frames[0];
     whead = &frames[1];
     animPos=1;
-    rhead->duration=1;
+    rhead->duration=500;
     rhead->rightFoot=90;
     rhead->leftFoot=90;
     rhead->rightLeg=90;
@@ -80,7 +81,8 @@ void resetAnimation(){
     if(rhead < frames){
         rhead = &frames[ARBSIZE-1];
     }
-    rhead->duration=1;
+    animPos=1;
+    rhead->duration=500;
     rhead->rightFoot=90;
     rhead->leftFoot=90;
     rhead->rightLeg=90;

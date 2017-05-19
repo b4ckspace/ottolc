@@ -2,6 +2,9 @@ import tkinter
 from datetime import datetime, timedelta
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import json
+from parse import parse
+
+# TODO: add library of animations to add quickly
 
 class Animtab():
     def __init__(self, master, app):
@@ -85,6 +88,7 @@ class Animtab():
 
         self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
         self.framelist.grid(row=0, column=4, rowspan=2)
+        self.framelist.bind('<Double-Button-1>', self.loadset)
 
         self.nosend = False
         self.mov(None)
@@ -123,6 +127,20 @@ class Animtab():
     def deleteselection(self):
         for i in reversed(self.framelist.curselection()):
             self.framelist.delete(i)
+
+    def loadset(self, _w=None):
+        item = self.framelist.get(tkinter.ACTIVE)
+        if len(item)==0:
+            return
+        res = parse("{:d} {:d} {:d} {:d} {:d}", item)
+        self.nosend = True
+        self.lf.set(res[1])
+        self.rf.set(res[0])
+        self.ll.set(res[3])
+        self.rl.set(res[2])
+        self.ts.set(res[4])
+        self.nosend = False
+        self.mov(None)
 
 
     def save(self):

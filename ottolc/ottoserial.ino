@@ -288,7 +288,7 @@ void apiCommand(String line){
 
   printres:
   memset(printbuf,0,PBUFSZ);
-  snprintf(printbuf, PBUFSZ, "%d %s\n", returncode, result.c_str());
+  snprintf(printbuf, PBUFSZ, ".%d %s\n", returncode, result.c_str());
   Serial.print(printbuf);
 }
 
