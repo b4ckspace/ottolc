@@ -30,12 +30,12 @@ class Animtab():
                                 resolution=1, command=self.mov,
                                 orient=tkinter.HORIZONTAL, label="right leg")
         self.rl.set(90)
-        self.rl.grid(row=0, column=0)
+        self.rl.grid(row=0, column=1)
         self.ll = tkinter.Scale(master, from_=0, to=180,
                                 resolution=1, command=self.mov,
                                 orient=tkinter.HORIZONTAL, label="left leg")
         self.ll.set(90)
-        self.ll.grid(row=0, column=1)
+        self.ll.grid(row=0, column=0)
 
         self.ts = tkinter.Scale(master, from_=1, to=1000,
                                 orient=tkinter.VERTICAL, label="animdur")
