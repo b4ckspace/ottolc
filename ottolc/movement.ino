@@ -20,14 +20,21 @@ void verifyTrimdata();
 char readSetting(Setting key);
 void writeSetting(Setting key, char value);
 void initMovement(){
+  for(int i=0;i<N_SERVOS;i++){
+    servopos[i]=90;
+  }
   enableServos();
   resetServos();
 }
 void enableServos(){
   servo[0].attach(PIN_RR);
+  servo[0].SetPosition(servopos[0]);
   servo[1].attach(PIN_RL);
+  servo[1].SetPosition(servopos[1]);
   servo[2].attach(PIN_YR);
+  servo[2].SetPosition(servopos[2]);
   servo[3].attach(PIN_YL);
+  servo[3].SetPosition(servopos[3]);
 }
 void disableServos(){
   servo[0].detach();
