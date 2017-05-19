@@ -11,15 +11,15 @@ int testvars[10] = {10,500,500,0,0,0,0,0,0,0};
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
-  Serial.println("setting a servo");
+  Serial.println(F("setting a servo"));
   int servonr;
   int degree;
   int matches = sscanf(args.c_str(), "%d %d", &servonr, &degree);
   if(matches!=2){
     Serial.print(matches);
-    Serial.print("could not parse arguments: '");
+    Serial.print(F("could not parse arguments: '"));
     Serial.print(args);
-    Serial.println("'");
+    Serial.println(F("'"));
     return;
   }
   EServo servo;
@@ -33,44 +33,44 @@ void replSetServo(String args){
     case 3:
       servo = leftLeg; break;
     default:
-      Serial.print("Unknknown servo nr ");
+      Serial.print(F("Unknknown servo nr "));
       Serial.println(servonr, DEC);
     break;
   }
   setServo(servo, degree);
-  Serial.println("Ok");
+  Serial.println(F("Ok"));
 }
 
 void setTVar(String args){
-  Serial.println("setting testvar");
+  Serial.println(F("setting testvar"));
   int varnr;
   int value;
   int matches = sscanf(args.c_str(), "%d %d", &varnr, &value);
   if(matches!=2){
     Serial.print(matches);
-    Serial.print("could not parse arguments: '");
+    Serial.print(F("could not parse arguments: '"));
     Serial.print(args);
     Serial.println("'");
     return;
   }
   testvars[varnr] = value;
-  Serial.println("Ok");
+  Serial.println(F("Ok"));
 }
 
 
 void replSetTrim(String args){
-  Serial.println("setting servo trim");
+  Serial.println(F("setting servo trim"));
   int servonr=-1;
   int trimvalue=-1;
   int matches = sscanf(args.c_str(), "%d %d", &servonr, &trimvalue);
   if(matches!=2){
     Serial.print(matches);
-    Serial.print("could not parse arguments: '");
+    Serial.print(F("could not parse arguments: '"));
     Serial.print(args);
-    Serial.println("'");
+    Serial.println(F("'"));
     return;
   }
-  Serial.print("setting servo to: ");
+  Serial.print(F("setting servo to: "));
   Serial.print(servonr);
   Serial.println(trimvalue);
   EServo servo;
@@ -84,12 +84,12 @@ void replSetTrim(String args){
     case 3:
       servo = leftLeg; break;
     default:
-      Serial.print("Unknknown servo nr ");
+      Serial.print(F("Unknknown servo nr "));
       Serial.println(servonr, DEC);
     break;
   }
   setTrimdata(servo, trimvalue);
-  Serial.println("Ok");
+  Serial.println(F("Ok"));
 }
 
 void replTrimtest(){
@@ -101,28 +101,28 @@ void replTrimtest(){
 }
 
 void replPrintServos(){
-  Serial.println("");
-  Serial.print("rightFoot = ");
+  Serial.println(F(""));
+  Serial.print(F("rightFoot = "));
   Serial.print(getServo(rightFoot));
-  Serial.println(";");
-  Serial.print("leftFoot = ");
+  Serial.println(F(";"));
+  Serial.print(F("leftFoot = "));
   Serial.print(getServo(leftFoot));
-  Serial.println(";");
-  Serial.print("rightLeg = ");
+  Serial.println(F(";"));
+  Serial.print(F("rightLeg = "));
   Serial.print(getServo(rightLeg));
-  Serial.println(";");
-  Serial.print("leftLeg = ");
+  Serial.println(F(";"));
+  Serial.print(F("leftLeg = "));
   Serial.print(getServo(leftLeg));
-  Serial.println(";");
+  Serial.println(F(";"));
 }
 
 void doCommands(){
   digitalWrite(13, HIGH);
-  Serial.println("Hello my name is otto, version 0.0.1");
+  Serial.println(F("Hello my name is otto, version 0.0.1"));
   Serial.readStringUntil('\n'); // Clear serial buffer
   Serial.setTimeout(5l*60l*1000l);
   while(true){
-    Serial.print("enter command: "); 
+    Serial.print(F("enter command: ")); 
     String line = Serial.readStringUntil('\n');
     if(line.length()==0){
       Serial.println();
@@ -147,7 +147,7 @@ void doCommands(){
       replSetServo(args);
     }else if(command=="resetservos"){
       resetServos();
-      Serial.println("servos reseted");
+      Serial.println(F("servos reseted"));
     }else if(command=="beep"){
       beep();
     }else if(command=="trimtest"){
@@ -175,7 +175,7 @@ void doCommands(){
     }else if(command=="!"){
       apiCommand(args);
     }else{
-      Serial.print("command not found: ");
+      Serial.print(F("command not found: "));
       Serial.println(command);
       beep();
     }
@@ -195,7 +195,7 @@ void apiCommand(String line){
   
   if(line.length()==0){
     returncode = -1;
-    result = "empty api command";
+    result = F("empty api command");
     goto printres;
   }
 
@@ -279,6 +279,12 @@ void apiCommand(String line){
         AnimStep(testvars[0]);
         delay(testvars[0]);
       }
+    }else if(command=="servosoff"){
+      disableServos();
+      result = "servos switched off";
+    }else if(command=="servoson"){
+      enableServos();
+      result = "servos switched on";
     }else{
       returncode = -1;
       result = "command not found";
@@ -383,11 +389,11 @@ void splayAnim(){
     delay(testvars[0]);
   }
 
-  Serial.println("end anim test");
+  Serial.println(F("end anim test"));
 }
 
 void sanimSetup(){
-  Serial.println("qing");
+  Serial.println(F("qing"));
   AnimKeyframe kf;
 
   kf.rightFoot=90;
@@ -427,8 +433,8 @@ void sanimSetup(){
 void sanimstep(){
   if(!AnimEndReached()){
     AnimStep(testvars[0]);
-    Serial.println("ok");
+    Serial.println(F("ok"));
   }else{
-    Serial.println("end anim test");
+    Serial.println(F("end anim test"));
   }
 }

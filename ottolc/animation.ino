@@ -1,7 +1,7 @@
 #include "enums.h"
 #include <string.h>
 
-#define ARBSIZE 20
+#define ARBSIZE 50
 //TODO: add special frame with function pointer to a fucntion that prepends 
 
 AnimKeyframe frames[ARBSIZE];
@@ -34,7 +34,7 @@ void initAnim(){
 void queueFrame(AnimKeyframe frame);
 void queueFrame(AnimKeyframe frame){
     if(whead==rhead){
-        Serial.println("Animation ringbuffer full, dropping Animation");
+        Serial.println(F("Animation ringbuffer full, dropping Animation"));
         beep();
         return;
     }
@@ -63,7 +63,7 @@ void AnimStep(int16_t ms){
 
     if(animPos>rhead->duration){
         if( (rhead==(whead-1))||((rhead==&frames[ARBSIZE-1])&&(whead==&frames[0]) ) ){
-            Serial.println("Animation ringbuffer empty, staying in last pos");
+            Serial.println(F("Animation ringbuffer empty, staying in last pos"));
             animend = true;
             return;
         }

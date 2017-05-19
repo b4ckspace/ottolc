@@ -2,11 +2,16 @@ import tkinter
 class Configtab():
     def __init__(self, master, app):
         self.app = app
-        tkinter.Button(
+        self.cbvar = tkinter.IntVar()
+        self.servocb = tkinter.Checkbutton(
             master,
-            text="do stuff",
-            command=self.nop).grid(
-            row=2,
-            column=0)
-    def nop(self, _w = None):
-    	pass
+            variable=self.cbvar,
+            text="enable servos",
+            command=self.servos)
+        self.servocb.grid(row=0,column=0)
+        self.servocb.select()
+    def servos(self, _w = None):
+    	if self.cbvar.get():
+    		self.app._sendcmd("! servosoff\n")
+    	else:
+    		self.app._sendcmd("! servoson\n")

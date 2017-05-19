@@ -20,11 +20,20 @@ void verifyTrimdata();
 char readSetting(Setting key);
 void writeSetting(Setting key, char value);
 void initMovement(){
+  enableServos();
+  resetServos();
+}
+void enableServos(){
   servo[0].attach(PIN_RR);
   servo[1].attach(PIN_RL);
   servo[2].attach(PIN_YR);
   servo[3].attach(PIN_YL);
-  resetServos();
+}
+void disableServos(){
+  servo[0].detach();
+  servo[1].detach();
+  servo[2].detach();
+  servo[3].detach();
 }
 
 void resetServos();
@@ -59,13 +68,13 @@ void setServo(EServo servon, int value){
     case leftFoot:  idx=1;break;
     case rightLeg:  idx=2;break;
     case leftLeg:   idx=3;break;
-    default:Serial.println("could not match servo in setservo oO");break;
+    default:Serial.println(F("could not match servo in setservo oO"));break;
   }
   if(value<0 || value > 180 ){
   // if(value<40 || value > 140 ){
-    Serial.print("preventing bad servo value ");
+    Serial.print(F("preventing bad servo value "));
     Serial.print(idx);
-    Serial.print(" ");
+    Serial.print(F(" "));
     Serial.println(value);
     return;
   }
@@ -95,7 +104,7 @@ void verifyTrimdata(){
   char data[4] = {a,b,c,d};
   char chk2 = badChecksum(data, 4);
   if(chk!=chk2){
-    Serial.println("Trimdata checksum verification failed.");
+    Serial.println(F("Trimdata checksum verification failed."));
     char zdata[] = {0,0,0,0};
     char zsum = badChecksum(zdata, 4);
     writeSetting(trimLeftFoot, 0);
@@ -104,7 +113,7 @@ void verifyTrimdata(){
     writeSetting(trimRightLeg, 0);
     writeSetting(trimChecksum, zsum);
   }else{
-    Serial.println("Trim data checksum ok");
+    Serial.println(F("Trim data checksum ok"));
   }
 }
 
