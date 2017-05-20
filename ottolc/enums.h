@@ -17,9 +17,28 @@ enum EServo{
 };
 
 struct __attribute__((packed)) AnimKeyframe{
-	uint8_t leftFoot = 90;
-	uint8_t rightFoot = 90;
-	uint8_t leftLeg = 90;
-	uint8_t rightLeg = 90;
+	uint8_t leftFoot;
+	uint8_t rightFoot;
+	uint8_t leftLeg;
+	uint8_t rightLeg;
 	int16_t duration; //duration in ms
+};
+
+struct __attribute__((packed)) AnimationCallback{
+	typedef void (*AnimFun)(void* params);
+	static constexpr size_t argsize = sizeof(AnimKeyframe)-sizeof(AnimFun);
+	AnimFun fun;
+	char args[argsize];
+};
+
+struct __attribute__((packed)) AnimStep_t{
+	uint8_t options;
+	enum optfields{
+		IS_FRAME=0,
+	}; 
+	union data_t{
+		AnimKeyframe keyframe;
+		AnimationCallback cb;
+	};
+	data_t data;
 };

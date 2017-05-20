@@ -4,46 +4,17 @@
 #define ARBSIZE 50
 //TODO: add special frame with function pointer to a fucntion that prepends 
 
-AnimKeyframe frames[ARBSIZE];
-AnimKeyframe *rhead;
-AnimKeyframe *whead;
+AnimStep_t frames[ARBSIZE];
+AnimStep_t *rhead;
+AnimStep_t *whead;
 int16_t animPos;
 AnimKeyframe startpos;
 
 bool animend;
 
 void initAnim(){
-    rhead = &frames[0];
     whead = &frames[1];
-    animPos=1;
-    rhead->duration=500;
-    rhead->rightFoot=90;
-    rhead->leftFoot=90;
-    rhead->rightLeg=90;
-    rhead->leftLeg=90;
-
-    startpos.duration=1;
-    startpos.rightFoot=90;
-    startpos.leftFoot=90;
-    startpos.rightLeg=90;
-    startpos.leftLeg=90;
-
-    animend = true;
-}
-
-void queueFrame(AnimKeyframe frame);
-void queueFrame(AnimKeyframe frame){
-    if(whead==rhead){
-        Serial.println(F("Animation ringbuffer full, dropping Animation"));
-        beep();
-        return;
-    }
-    memcpy(whead, &frame, sizeof(AnimKeyframe));
-    whead++;
-    if(whead==&frames[ARBSIZE]){
-        whead=&frames[0];
-    }
-    animend = false;
+    resetAnimation();
 }
 
 
@@ -51,23 +22,29 @@ int getServo(EServo servon);
 void setServo(EServo servon, int value);
 
 void AnimStep(int16_t ms){
-    uint16_t endtime = min(animPos+ms, rhead->duration);
-    float factor = float(endtime) / float(rhead->duration);
+    if(!(rhead->options & (1<<AnimStep_t::IS_FRAME))){
+        Serial.println(F("non frame found in animation system :("));
+        beep();
+        while(1){}
+    }
 
-    setServo(rightFoot, startpos.rightFoot + int16_t(round( (float(rhead->rightFoot)-float(startpos.rightFoot))*factor)) );
-    setServo(leftFoot,  startpos.leftFoot  + int16_t(round( (float(rhead->leftFoot) -float(startpos.leftFoot)) *factor)) );
-    setServo(rightLeg,  startpos.rightLeg  + int16_t(round( (float(rhead->rightLeg) -float(startpos.rightLeg)) *factor)) );
-    setServo(leftLeg,   startpos.leftLeg   + int16_t(round( (float(rhead->leftLeg)  -float(startpos.leftLeg))  *factor)) );
+    uint16_t endtime = min(animPos+ms, rhead->data.keyframe.duration);
+    float factor = float(endtime) / float(rhead->data.keyframe.duration);
+
+    setServo(rightFoot, startpos.rightFoot + int16_t(round( (float(rhead->data.keyframe.rightFoot)-float(startpos.rightFoot))*factor)) );
+    setServo(leftFoot,  startpos.leftFoot  + int16_t(round( (float(rhead->data.keyframe.leftFoot) -float(startpos.leftFoot)) *factor)) );
+    setServo(rightLeg,  startpos.rightLeg  + int16_t(round( (float(rhead->data.keyframe.rightLeg) -float(startpos.rightLeg)) *factor)) );
+    setServo(leftLeg,   startpos.leftLeg   + int16_t(round( (float(rhead->data.keyframe.leftLeg)  -float(startpos.leftLeg))  *factor)) );
 
     animPos += ms;
 
-    if(animPos>rhead->duration){
+    if(animPos>rhead->data.keyframe.duration){
         if( (rhead==(whead-1))||((rhead==&frames[ARBSIZE-1])&&(whead==&frames[0]) ) ){
             Serial.println(F("Animation ringbuffer empty, staying in last pos"));
             animend = true;
             return;
         }
-        memcpy(&startpos, rhead, sizeof(AnimKeyframe));
+        memcpy(&startpos, &rhead->data.keyframe, sizeof(AnimKeyframe));
         rhead++;
         if(rhead>=&frames[ARBSIZE]){
             rhead=&frames[0];
@@ -82,13 +59,42 @@ void resetAnimation(){
         rhead = &frames[ARBSIZE-1];
     }
     animPos=1;
-    rhead->duration=500;
-    rhead->rightFoot=90;
-    rhead->leftFoot=90;
-    rhead->rightLeg=90;
-    rhead->leftLeg=90;
-    animend=true;
+    rhead->options = 1<<AnimStep_t::IS_FRAME;
+    rhead->data.keyframe.duration=500;
+    rhead->data.keyframe.rightFoot=90;
+    rhead->data.keyframe.leftFoot=90;
+    rhead->data.keyframe.rightLeg=90;
+    rhead->data.keyframe.leftLeg=90;
+
+    startpos.duration=1;
+    startpos.rightFoot=90;
+    startpos.leftFoot=90;
+    startpos.rightLeg=90;
+    startpos.leftLeg=90;
+
+    animend = true;
 }
+bool addAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg, uint8_t rightLeg, uint16_t time){
+    if(whead==rhead){
+        Serial.println(F("Animation ringbuffer full, dropping Animation"));
+        beep();
+        return 1;
+    }
+    whead->options = 1<<AnimStep_t::IS_FRAME;
+    whead->data.keyframe.duration  = time;
+    whead->data.keyframe.rightFoot = rightFoot;
+    whead->data.keyframe.leftFoot  = leftFoot;
+    whead->data.keyframe.rightLeg  = rightLeg;
+    whead->data.keyframe.leftLeg   = leftLeg;
+    whead++;
+    if(whead==&frames[ARBSIZE]){
+        whead=&frames[0];
+    }
+    animend = false;
+    return 0;
+}
+
+
 
 inline bool AnimEndReached(){
     return animend;
