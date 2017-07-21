@@ -2,8 +2,6 @@
 
 */
 
-// changable by sending some data via serial during the first 2 seconds after servo reset
-bool debug_mode = false;
 
 void setup() {
   Serial.begin(9600);
@@ -11,13 +9,15 @@ void setup() {
   initMovement();
   initBuzzer();
   initAnim();
-  debug_mode = isDebug();
+  // initSensors();
 }
 
 void loop() {
-  if(debug_mode){
-    doCommands();
-  }else{
-    dance();
+  handleSerial();
+  obstacleAvoidance();
+  if(!AnimEndReached()){
+    long animation_step_ms = 30;
+    AnimStep(animation_step_ms);
+    delay(animation_step_ms);
   }
 }

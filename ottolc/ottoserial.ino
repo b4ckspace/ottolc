@@ -1,10 +1,15 @@
 // this file manages serial communications and command dispatch for debug&adjustment purposes
 #include <stdio.h>
 bool isDebug(){
-  //beep();
   return true;
-  delay(2000);
-  return Serial.available();
+  delay(2000);  
+  if(Serial.available()){
+    digitalWrite(13, HIGH);
+    Serial.println(F("Hello my name is otto, version 0.0.1"));
+    Serial.readStringUntil('\n'); // Clear serial buffer
+    Serial.setTimeout(20);
+    Serial.print(F("enter command: ")); 
+  }
 }
 
 int testvars[10] = {10,500,500,0,0,0,0,0,0,0};
@@ -116,65 +121,74 @@ void replPrintServos(){
   Serial.println(F(";"));
 }
 
-void doCommands(){
-  digitalWrite(13, HIGH);
-  Serial.println(F("Hello my name is otto, version 0.0.1"));
-  Serial.readStringUntil('\n'); // Clear serial buffer
-  Serial.setTimeout(5l*60l*1000l);
-  while(true){
-    Serial.print(F("enter command: ")); 
-    String line = Serial.readStringUntil('\n');
-    if(line.length()==0){
-      Serial.println();
-      continue;
+//we do our own input handling so we do not block if there is an incomplete
+//line in the buffer
+String linebuf;
+void handleSerial(){
+  while(Serial.available()>0){
+    char chr = Serial.read();
+    switch(chr){
+      case '\r':break;
+      case '\n':
+        doCommand(linebuf);
+        linebuf="";
+      break;
+      default:
+        linebuf+=chr;
     }
-    auto pos = line.indexOf(' ');
-    if(pos<0){
-      pos = line.length();
-    }
-    String command = line.substring(0, pos);
-    Serial.print(command + " ");
-    String args = "";
-    if( (pos+1)<(line.length()) ){
-      args = line.substring(pos+1, line.length());
-    }
-
-
-    //TODO: replace with something better, hash map?
-    if(command=="ping"){
-      Serial.println("pong!");
-    }else if(command=="setservo"){
-      replSetServo(args);
-    }else if(command=="resetservos"){
-      resetServos();
-      Serial.println(F("servos reseted"));
-    }else if(command=="beep"){
-      beep();
-    }else if(command=="trimtest"){
-      replTrimtest();
-    }else if(command=="play"){
-      splayAnim();
-    }else if(command=="settrim"){
-      replSetTrim(args);
-      replTrimtest();
-    }else if(command=="printservos"||command=="ps"){
-      replPrintServos();
-    }else if(command=="s"){
-      sanimstep();
-    }else if(command=="tset"){
-      setTVar(args);
-    }else if(command=="reset"){
-      void(* resetFunc) (void) = 0;
-      resetFunc();
-    }else if(command=="!"){
-      apiCommand(args);
-    }else{
-      Serial.print(F("command not found: "));
-      Serial.println(command);
-      beep();
-    }
-    
   }
+}
+
+void doCommand(String line){
+  if(line.length()==0){
+    return;
+  }
+  auto pos = line.indexOf(' ');
+  if(pos<0){
+    pos = line.length();
+  }
+  String command = line.substring(0, pos);
+  Serial.print(command + " ");
+  String args = "";
+  if( (pos+1)<(line.length()) ){
+    args = line.substring(pos+1, line.length());
+  }
+
+  //TODO: replace with something better, hash map?
+  if(command=="ping"){
+    Serial.println("pong!");
+  }else if(command=="setservo"){
+    replSetServo(args);
+  }else if(command=="resetservos"){
+    resetServos();
+    Serial.println(F("servos reseted"));
+  }else if(command=="beep"){
+    beep();
+  }else if(command=="trimtest"){
+    replTrimtest();
+  }else if(command=="play"){
+    startAnimation();
+  }else if(command=="settrim"){
+    replSetTrim(args);
+    replTrimtest();
+  }else if(command=="printservos"||command=="ps"){
+    replPrintServos();
+  }else if(command=="tset"){
+    setTVar(args);
+  }else if(command=="e"){
+    Serial.println(F("echo? "));
+    sensorfoo();
+  }else if(command=="reset"){
+    void(* resetFunc) (void) = 0;
+    resetFunc();
+  }else if(command=="!"){
+    apiCommand(args);
+  }else{
+    Serial.print(F("command not found: "));
+    Serial.println(command);
+    beep();
+  }
+  Serial.print(F("enter command: ")); 
 }
 
 // this seperate function should be used for commands that are used by tools and should not change their interface
@@ -261,10 +275,7 @@ void apiCommand(String line){
       result = "animation cleared";
       resetAnimation();
     }else if(command=="playanim"){
-      while(!AnimEndReached()){
-        AnimStep(testvars[0]);
-        delay(testvars[0]);
-      }
+      startAnimation();
     }else if(command=="servosoff"){
       disableServos();
       result = "servos switched off";
@@ -282,24 +293,4 @@ void apiCommand(String line){
   memset(printbuf,0,PBUFSZ);
   snprintf(printbuf, PBUFSZ, ".%d %s\n", returncode, result.c_str());
   Serial.print(printbuf);
-}
-
-
-
-void splayAnim(){
-  while(!AnimEndReached()){
-    AnimStep(testvars[0]);
-    delay(testvars[0]);
-  }
-
-  Serial.println(F("end anim test"));
-}
-
-void sanimstep(){
-  if(!AnimEndReached()){
-    AnimStep(testvars[0]);
-    Serial.println(F("ok"));
-  }else{
-    Serial.println(F("end anim test"));
-  }
 }

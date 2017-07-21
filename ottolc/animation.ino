@@ -20,12 +20,15 @@ void initAnim(){
 
 int getServo(EServo servon);
 void setServo(EServo servon, int value);
-
+bool in_anim_callback = false;
 void AnimStep(int16_t ms){
     if(!(rhead->options & (1<<AnimStep_t::IS_FRAME))){
-        Serial.println(F("non frame found in animation system :("));
-        beep();
-        while(1){}
+        in_anim_callback = true;
+        rhead++;
+        //copy funptr and args so we dont overwrite data on front insert
+        AnimationCallback cbinfo = rhead->data.cb;
+        cbinfo.fun(cbinfo.args);
+        in_anim_callback = false;
     }
 
     uint16_t endtime = min(animPos+ms, rhead->data.keyframe.duration);
@@ -90,10 +93,45 @@ bool addAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg, uin
     if(whead==&frames[ARBSIZE]){
         whead=&frames[0];
     }
-    animend = false;
     return 0;
 }
 
+bool prependAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg, uint8_t rightLeg, uint16_t time){
+    if(!in_anim_callback){
+        Serial.println(F("prepend called but not in animation callback"));
+        beep();
+        return 1;
+    }
+
+    if(whead==rhead){
+        Serial.println(F("Animation ringbuffer full, dropping Animation"));
+        beep();
+        return 1;
+    }
+
+    rhead--;
+
+    if(rhead<&frames[0]){
+        rhead=&frames[ARBSIZE-1];
+    }
+    if(whead==rhead){
+        Serial.println(F("Animation ringbuffer full, dropping Animation"));
+        beep();
+        return 1;
+    }
+
+    rhead->options = 1<<AnimStep_t::IS_FRAME;
+    rhead->data.keyframe.duration  = time;
+    rhead->data.keyframe.rightFoot = rightFoot;
+    rhead->data.keyframe.leftFoot  = leftFoot;
+    rhead->data.keyframe.rightLeg  = rightLeg;
+    rhead->data.keyframe.leftLeg   = leftLeg;
+    return 0;
+}
+
+void startAnimation(){
+    animend = false;
+}
 
 
 inline bool AnimEndReached(){
