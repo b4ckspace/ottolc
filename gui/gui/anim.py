@@ -9,30 +9,28 @@ from parse import parse
 class Animtab():
     def __init__(self, master, app):
         self.app = app
-        self.nosend = True
             
         frame = tkinter.Frame(master)
-        self.lastsend = datetime.now()
 
         self.lf = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.mov,
+                                resolution=1, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="left foot")
         self.lf.set(90)
         self.lf.grid(row=1, column=0)
 
         self.rf = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.mov,
+                                resolution=1, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="right foot")
         self.rf.set(90)
         self.rf.grid(row=1, column=1)
 
         self.rl = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.mov,
+                                resolution=1, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="right leg")
         self.rl.set(90)
         self.rl.grid(row=0, column=1)
         self.ll = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.mov,
+                                resolution=1, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="left leg")
         self.ll.set(90)
         self.ll.grid(row=0, column=0)
@@ -90,20 +88,18 @@ class Animtab():
         self.framelist.grid(row=0, column=4, rowspan=2)
         self.framelist.bind('<Double-Button-1>', self.loadset)
 
-        self.nosend = False
-        self.mov(None)
+        #self.nosend = False
+        #self.app.mov(None)
 
-    def mov(self, _w):
-        if self.nosend:
-            return
-        now = datetime.now()
-        delta = now - self.lastsend
-        if (now - self.lastsend) < timedelta(milliseconds=100):
-            return
-        self.lastsend = now
-        cmdstr = "! setservos %d %d %d %d \n" % (
-            self.rf.get(), self.lf.get(), self.rl.get(), self.ll.get())
-        self.app._sendcmd(cmdstr)
+    def getrf(self):
+        return self.rf.get()
+    def getlf(self):
+        return self.lf.get()
+    def getrl(self):
+        return self.rl.get()
+    def getll(self):
+        return self.ll.get()
+
 
     def addframe(self):
         cmd = "%d %d %d %d %d" % (
@@ -140,7 +136,7 @@ class Animtab():
         self.rl.set(res[2])
         self.ts.set(res[4])
         self.nosend = False
-        self.mov(None)
+        self.app.mov(None)
 
 
     def save(self):
@@ -167,4 +163,4 @@ class Animtab():
         self.ll.set(90)
         self.rl.set(90)
         self.nosend = False
-        self.mov(None)
+        self.app.mov(None)

@@ -19,6 +19,9 @@ class App():
 
         tabs = ttk.Notebook(master)
 
+        self.nosend = True
+        self.lastsend = datetime.now()
+
         animframe = ttk.Frame(tabs)
         configframe = ttk.Frame(tabs)
         logframe = ttk.Frame(tabs)
@@ -30,6 +33,9 @@ class App():
 
         self.animwidget = Animtab(animframe, self)
         self.configwidget = Configtab(configframe, self)
+
+        self.nosend = False
+        self.mov(None)
 
     def _initserial(self):
         self.ser.timeout=0.1
@@ -58,4 +64,21 @@ class App():
                 raise
         else:
             print(cmd[0:-1])
+
+    def mov(self, _w):
+        if self.nosend:
+            return
+        now = datetime.now()
+        delta = now - self.lastsend
+        if (now - self.lastsend) < timedelta(milliseconds=100):
+            return
+        print("mov...")
+        self.lastsend = now
+        cmdstr = "! setservos %d %d %d %d \n" % (
+            #self.rf.get(), self.lf.get(), self.rl.get(), self.ll.get()
+            self.animwidget.getrf(), self.animwidget.getlf(), self.animwidget.getrl(), self.animwidget.getll(), 
+            )
+            
+        self._sendcmd(cmdstr)
+        
     # def log
