@@ -22,56 +22,82 @@ for(const lpos of [[100,200,100],[-100, 200, -100],[0, -200, 0]]){
 
 var limbs = {};
 var lmash;
-loader.load( 'assets/3D print/OTTO_footL_v4.stl', function ( geometry ) {
+loader.load( 'assets/3D print/OTTO_leg_v4.stl', function ( geometry ) {
 	var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
-	var lf = new THREE.Mesh( geometry, material );
-	lf.rotation.set(-0.5*Math.PI, 0, 0.5*Math.PI);
-	lf.position.x=-35;
-	objects.push(lf);
-	limbs.lf=lf;
+	var ll = new THREE.Mesh( geometry, material );
+	objects.push(ll);
+	ll.rotation.set(Math.PI,0,Math.PI);
+	ll.position.set(0, 25, 0);
+	limbs.ll=ll;
 	var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
-	var rf = new THREE.Mesh( geometry, material );
-	rf.rotation.set(-0.5*Math.PI, 0, -0.5*Math.PI);
-	rf.position.x=35;
-	
-	objects.push(rf);
-	limbs.rf=rf;
-	loader.load( 'assets/3D print/OTTO_leg_v4.stl', function ( geometry ) {
+	var rl = new THREE.Mesh( geometry, material );
+	objects.push(rl);
+	rl.rotation.set(Math.PI,0,Math.PI);
+	rl.position.set(0, -25, 0);
+	limbs.rl=rl;
+
+
+
+
+	loader.load( 'assets/3D print/OTTO_footL_v4.stl', function ( geometry ) {
 		var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
-		var ll = new THREE.Mesh( geometry, material );
-		objects.push(ll);
-		ll.rotation.set(Math.PI,0,Math.PI);
-		ll.position.set(0, -10, 45);
-		lf.add(ll);
-		limbs.ll=ll;
+		var lf = new THREE.Mesh( geometry, material );
+		lf.rotation.set(Math.PI, 0, Math.PI);
+		var lfp = new THREE.Object3D();
+		lfp.position.z = 50-20;
+		lfp.position.y = 0;
+		lf.position.z=15;
+		lf.position.y=10;
+		lfp.add(lf);
+		objects.push(lf);
+		limbs.lf=lf;
+		limbs.lfp=lfp;
+
 		var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
-		var rl = new THREE.Mesh( geometry, material );
-		objects.push(rl);
-		rl.rotation.set(Math.PI,0,Math.PI);
-		rl.position.set(0, -10, 45);
-		rf.add(rl);
-		limbs.rl=rl;
+		var rf = new THREE.Mesh( geometry, material );
+		rf.rotation.set(Math.PI, 0, 0);
+		var rfp = new THREE.Object3D();
+		rfp.position.z = 50-20;
+		rfp.position.y = 0;
+		rf.position.z=15;
+		rf.position.y=-10;
+		rfp.add(rf);
+		objects.push(rf);
+		limbs.rf=rf;
+		limbs.rfp=rfp;
+
+
 		loader.load( 'assets/3D print/OTTO_body_v3.stl', function ( geometry ) {
 			var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
 			var body = new THREE.Mesh( geometry, material );
 			body.rotation.set(-0.5*Math.PI,0,0.5*Math.PI)
 			objects.push(body);
 			body.position.y=45;
+			limbs.body=body;
 			lmash=body;
 
-			scene.add(lf);
-			scene.add(rf);
+			body.add(ll);
+			body.add(rl);
+			ll.add(lfp);
+			rl.add(rfp);
 			scene.add(body);
+			var gui = new dat.GUI();
+			var lg = gui.addFolder('left');
+			lg.add(limbs.ll.rotation, 'z').step(0.01);
+			lg.add(lfp.rotation, 'x').step(0.01);
+			var rg = gui.addFolder('right');
+			rg.add(limbs.rl.rotation, 'z').step(0.01);
+			rg.add(rfp.rotation, 'x').step(0.01);
 		});
-	} );
-} );
+	});
+});
 
 
 
 var axisHelper = new THREE.AxisHelper(100);
 scene.add( axisHelper );
 let controls = new THREE.OrbitControls( camera, renderer.domElement );
-camera.position.set(45,52,77);
+camera.position.set(65,140,113);
 function animate() {
 	requestAnimationFrame( animate );
 	controls.update();
