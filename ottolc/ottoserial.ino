@@ -168,7 +168,7 @@ void doCommand(String line){
     replTrimtest();
   }else if(command=="play"){
     startAnimation();
-  }else if(command=="settrim"){
+  }else if(command=="settrim"||command=="st"){
     replSetTrim(args);
     replTrimtest();
   }else if(command=="printservos"||command=="ps"){
