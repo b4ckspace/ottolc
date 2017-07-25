@@ -12,30 +12,30 @@ class Animtab():
             
         frame = tkinter.Frame(master)
 
-        self.lf = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.app.mov,
+        self.lf = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="left foot")
-        self.lf.set(90)
+        self.lf.set(0)
         self.lf.grid(row=1, column=0)
 
-        self.rf = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.app.mov,
+        self.rf = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="right foot")
-        self.rf.set(90)
+        self.rf.set(0)
         self.rf.grid(row=1, column=1)
 
-        self.rl = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.app.mov,
+        self.rl = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="right leg")
-        self.rl.set(90)
+        self.rl.set(0)
         self.rl.grid(row=0, column=1)
-        self.ll = tkinter.Scale(master, from_=0, to=180,
-                                resolution=1, command=self.app.mov,
+        self.ll = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="left leg")
-        self.ll.set(90)
+        self.ll.set(0)
         self.ll.grid(row=0, column=0)
 
-        self.ts = tkinter.Scale(master, from_=1, to=1000,
+        self.ts = tkinter.Scale(master, from_=1, to=1000, length=200,
                                 orient=tkinter.VERTICAL, label="animdur")
         self.ts.set(500)
         self.ts.grid(row=0, column=2, rowspan=2)
@@ -117,7 +117,7 @@ class Animtab():
     def _sendandplayanim(self, animlist):
         self.app._sendcmd("! resetanim\n" )
         for i in animlist:
-            self.app._sendcmd("! pushframe %s\n"%(i,))
+            self.app._sendcmd("! pushframe %s\n" % (i,))
         self.app._sendcmd("! playanim\n")
 
     def deleteselection(self):
@@ -158,9 +158,9 @@ class Animtab():
 
     def resetServos(self):
         self.nosend = True
-        self.lf.set(90)
-        self.rf.set(90)
-        self.ll.set(90)
-        self.rl.set(90)
+        self.lf.set(0)
+        self.rf.set(0)
+        self.ll.set(0)
+        self.rl.set(0)
         self.nosend = False
         self.app.mov(None)

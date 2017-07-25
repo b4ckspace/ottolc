@@ -1,5 +1,5 @@
 // this file manages general movement and servo comms
-#include <Servo.h>
+//#include <Servo.h>
 #include <Oscillator.h>
 #include <EEPROM.h>
 #include "enums.h"
@@ -19,9 +19,21 @@ void resetServos();
 void verifyTrimdata();
 char readSetting(Setting key);
 void writeSetting(Setting key, char value);
+
+// Caclulate absolute servo position
+int absPos(int pos = 0){
+  pos += 90;
+  return pos;
+}
+// Caclulate relative servo position
+int relPos(int pos = 0){
+  pos -= 90;
+  return pos;
+}
+
 void initMovement(){
   for(int i=0;i<N_SERVOS;i++){
-    servopos[i]=90;
+    servopos[i]=absPos();
   }
   enableServos();
   resetServos();
@@ -78,7 +90,6 @@ void setServo(EServo servon, int value){
     default:Serial.println(F("could not match servo in setservo oO"));break;
   }
   if(value<0 || value > 180 ){
-  // if(value<40 || value > 140 ){
     Serial.print(F("preventing bad servo value "));
     Serial.print(idx);
     Serial.print(F(" "));

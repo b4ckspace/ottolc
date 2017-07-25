@@ -49,6 +49,7 @@ class App():
             raise
 
     def _sendcmd(self, cmd):
+        print("cmd: " + str(cmd))
         if self.use_serial:
             self.ser.write(cmd.encode('utf-8'))
             try:
@@ -65,6 +66,19 @@ class App():
         else:
             print(cmd[0:-1])
 
+
+    def calcabspos(self,pos):
+        ## depricated function, because absPos is calculated in ottolc arduino code
+        if len(pos.split()) == 5:
+            l = list(map(lambda x:int(x)+90, pos.split()[0:-1]))
+            l.append( int(pos.split()[-1]) )
+        elif len(pos.split()) == 4:
+            l = list(map(lambda x:int(x)+90, pos.split()[0:]))
+        else:
+            print("wrong position-string format: %d" % (pos))
+        newlist = " ".join(map(str, l))
+        return newlist
+
     def mov(self, _w):
         if self.nosend:
             return
@@ -74,10 +88,10 @@ class App():
             return
         print("mov...")
         self.lastsend = now
-        cmdstr = "! setservos %d %d %d %d \n" % (
-            #self.rf.get(), self.lf.get(), self.rl.get(), self.ll.get()
+        tempstr = "%d %d %d %d \n" % (
             self.animwidget.getrf(), self.animwidget.getlf(), self.animwidget.getrl(), self.animwidget.getll(), 
             )
+        cmdstr = "! setservos %s \n" % (tempstr)
             
         self._sendcmd(cmdstr)
         
