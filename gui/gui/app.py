@@ -50,6 +50,7 @@ class App():
 
     def _sendcmd(self, cmd):
         print("cmd: " + str(cmd))
+        response = b''
         if self.use_serial:
             self.ser.write(cmd.encode('utf-8'))
             try:
@@ -57,10 +58,15 @@ class App():
                     line = self.ser.readline()
                     if len(line)==0:
                         break
-                    print(line)
+                    #print(line)
+                    response += line
                     if line[0]==ord('.'):
-                        print("***************")
+                        #print("***************")
+                        response += b'***************'
                         break
+                #print(output)
+                #return self.getResponse(response, True)
+                return self.getResponse(response)
             except Exception as e:
                 raise
         else:
@@ -86,7 +92,6 @@ class App():
         delta = now - self.lastsend
         if (now - self.lastsend) < timedelta(milliseconds=100):
             return
-        print("mov...")
         self.lastsend = now
         tempstr = "%d %d %d %d \n" % (
             self.animwidget.getrf(), self.animwidget.getlf(), self.animwidget.getrl(), self.animwidget.getll(), 
@@ -94,5 +99,37 @@ class App():
         cmdstr = "! setservos %s \n" % (tempstr)
             
         self._sendcmd(cmdstr)
+
+    def getResponse(self, serialResponse, verbose = False):
+        response = b''
+        responselist = serialResponse.split(b'\n')
+        for line in responselist:
+            if line[-1:] == b'\r':
+                line = line[:-1]
+            if verbose == True:
+                print("response: %s" % (line))
+            if line and line[0] == ord('.'):
+                if verbose == True:
+                    print ("found valid resonse: %s" % (line))
+                splitline = line.split(b' + ')
+                if len(splitline) > 1:
+                    response = splitline[1]
+        return response
+        
+
+    def saveTrim(self):
+        print("saving trim...")
+        cmdstr = "! gettrims\n"
+        response = self._sendcmd(cmdstr)
+        """
+        responselist = response.split(b'\n')
+        for line in responselist:
+            if line[-1:] == b'\r':
+                line = line[:-1]
+            print("response: %s" % (line))
+        """
+        #print("foo: " + str(self.getResponse(response, True)))
+        print("old trim: %s" % (response))
+        #print(response)
         
     # def log

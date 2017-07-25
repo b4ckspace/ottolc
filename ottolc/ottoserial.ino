@@ -259,7 +259,7 @@ void apiCommand(String line){
         setServo(leftFoot, absPos(leftFootv));
         setServo(rightLeg, absPos(rightLegv));
         setServo(leftLeg, absPos(leftLegv));
-        result="servenableServosos set";
+        result="Servos set";
       }
     }else if(command=="pushframe"){
       int leftFootv,rightFootv,leftLegv,rightLegv,duration;
@@ -291,6 +291,6 @@ void apiCommand(String line){
 
   printres:
   memset(printbuf,0,PBUFSZ);
-  snprintf(printbuf, PBUFSZ, ".%d %s\n", returncode, result.c_str());
+  snprintf(printbuf, PBUFSZ, ".%d %s\r\n", returncode, result.c_str());
   Serial.print(printbuf);
 }
