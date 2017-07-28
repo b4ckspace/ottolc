@@ -197,6 +197,14 @@ void doCommand(String line){
 char printbuf[PBUFSZ];
 
 void apiCommand(String line){
+  // API DESIGN:
+  // to distinguish between debug output and api output on the serial connection
+  // api call results are prefixed by a dot .
+  // the . is then followed by the return code integer, 0 representing ok and all other
+  // values representing an error
+  // this is then followed by either the function call result or
+  // a human readable error string.
+
   Serial.println();
   int returncode=0;
   String result="";
@@ -224,11 +232,11 @@ void apiCommand(String line){
     }else if(command=="maxframes"){
       result=ARBSIZE;
     }else if(command=="apiversion"){
-      result="0001";
+      result="0002";
     }else if(command=="gettrims"){
       char getTrimdata(EServo servo);
       memset(printbuf,0,PBUFSZ);
-      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", getTrimdata(rightFoot), getTrimdata(leftFoot), getTrimdata(rightLeg), getTrimdata(leftLeg));
+      snprintf(printbuf, PBUFSZ, "%d %d %d %d", getTrimdata(rightFoot), getTrimdata(leftFoot), getTrimdata(rightLeg), getTrimdata(leftLeg));
       result=printbuf;
     }else if(command=="settrims"){
       int a,b,c,d;
@@ -246,7 +254,7 @@ void apiCommand(String line){
     }else if(command=="getservos"){
       int getServo(EServo servo);
       memset(printbuf,0,PBUFSZ);
-      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", relPos(getServo(rightFoot)), relPos(getServo(leftFoot)), relPos(getServo(rightLeg)), relPos(getServo(leftLeg)));
+      snprintf(printbuf, PBUFSZ, "%d %d %d %d", relPos(getServo(rightFoot)), relPos(getServo(leftFoot)), relPos(getServo(rightLeg)), relPos(getServo(leftLeg)));
       result=printbuf;
     }else if(command=="setservos"){
       int leftFootv,rightFootv,leftLegv,rightLegv;
