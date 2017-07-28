@@ -9,7 +9,7 @@ var objects = []
 let raycaster = new THREE.Raycaster();
 var loader = new THREE.STLLoader();
 
-for(const lpos of [[100,200,100],[-100, 200, -100],[0, -200, 0]]){
+for(const lpos of [[150,200,100],[-100, 200, -150],[0, -200, 0]]){
 	const pointLight =new THREE.PointLight(0xFFFFFF);
 	pointLight.position.x = lpos[0];
 	pointLight.position.y = lpos[1];
