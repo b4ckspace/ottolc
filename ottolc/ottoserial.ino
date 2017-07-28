@@ -168,7 +168,7 @@ void doCommand(String line){
     replTrimtest();
   }else if(command=="play"){
     startAnimation();
-  }else if(command=="settrim"){
+  }else if(command=="settrim"||command=="st"){
     replSetTrim(args);
     replTrimtest();
   }else if(command=="printservos"||command=="ps"){
@@ -246,7 +246,7 @@ void apiCommand(String line){
     }else if(command=="getservos"){
       int getServo(EServo servo);
       memset(printbuf,0,PBUFSZ);
-      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", getServo(rightFoot), getServo(leftFoot), getServo(rightLeg), getServo(leftLeg));
+      snprintf(printbuf, PBUFSZ, "+ %d %d %d %d", relPos(getServo(rightFoot)), relPos(getServo(leftFoot)), relPos(getServo(rightLeg)), relPos(getServo(leftLeg)));
       result=printbuf;
     }else if(command=="setservos"){
       int leftFootv,rightFootv,leftLegv,rightLegv;
@@ -255,11 +255,11 @@ void apiCommand(String line){
         returncode = -1;
         result="could not parse format";
       }else{
-        setServo(rightFoot, rightFootv);
-        setServo(leftFoot, leftFootv);
-        setServo(rightLeg, rightLegv);
-        setServo(leftLeg, leftLegv);
-        result="servos set";
+        setServo(rightFoot, absPos(rightFootv));
+        setServo(leftFoot, absPos(leftFootv));
+        setServo(rightLeg, absPos(rightLegv));
+        setServo(leftLeg, absPos(leftLegv));
+        result="Servos set";
       }
     }else if(command=="pushframe"){
       int leftFootv,rightFootv,leftLegv,rightLegv,duration;
@@ -268,7 +268,7 @@ void apiCommand(String line){
         returncode = -1;
         result="could not parse format";
       }else{
-        addAnimationFrame(leftFootv,rightFootv,leftLegv,rightLegv,duration);
+        addAnimationFrame(absPos(leftFootv),absPos(rightFootv),absPos(leftLegv),absPos(rightLegv),duration);
         result="frame added";
       }
     }else if(command=="resetanim"){
@@ -291,6 +291,6 @@ void apiCommand(String line){
 
   printres:
   memset(printbuf,0,PBUFSZ);
-  snprintf(printbuf, PBUFSZ, ".%d %s\n", returncode, result.c_str());
+  snprintf(printbuf, PBUFSZ, ".%d %s\r\n", returncode, result.c_str());
   Serial.print(printbuf);
 }
