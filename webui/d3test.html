@@ -3,15 +3,8 @@
 <title>Spline Editor</title>
 <style>
 
-body {
-  font: 13px sans-serif;
-  position: relative;
-  width: 960px;
-  height: 500px;
-}
 
 rect {
-  fill: none;
   pointer-events: all;
 }
 
@@ -46,7 +39,7 @@ circle {
 <script>
 
 let width = 960,
-    height = 500;
+    height = 300;
 
 //points for each servos movement. lines[0] is for animation keyframes
 //thats why we fix the y-position in mousemove
@@ -69,6 +62,7 @@ let svg = d3.select("body").append("svg")
 svg.append("rect")
     .attr("width", width)
     .attr("height", height)
+    .attr("fill", "grey")
     .on("mousedown", mousedown);
 svg.append("path").datum([[0, height/2], [width, height/2]]).attr("d", d3.svg.line()).style("stroke", "black");
 svg.append("path").datum([[0, height], [width, height]]).attr("d", d3.svg.line()).style("stroke", "black");
@@ -154,9 +148,7 @@ function mousemove() {
   mousepos = d3.mouse(svg.node());
   if (dragged){
     let m = mousepos;
-    //pin the leftmost point to the left edge(an animation always has to start and end somewhere)
-    if( (dragged[0]!=0)&&(dragged[0]!=width) )
-      dragged[0] = Math.max(0, Math.min(width, m[0]));
+    dragged[0] = Math.max(0, Math.min(width, m[0]));
     dragged[1] = Math.max(0, Math.min(height, m[1]));
     if(selected_line_idx==0){
       dragged[1]=height/2;
@@ -193,19 +185,20 @@ function keydown() {
 
 //ensure points are not on the same x coordinate and the points are in the right order
 function cleanPoints(){
-  for(let points of lines){
+  let min_dist = 0.1
 
+  for(let points of lines){
     //implicitly allows moving several points to the right
     for (var i = 1; i < (points.length); i++) {
       if(points[i][0]<=points[i-1][0]){
-        points[i][0]=points[i-1][0]+0.5;
+        points[i][0]=points[i-1][0]+(min_dist/2);
       }
     }
     //uggly code to allow moving points to the left, not working propperly but better than nothing
     for (var i = points.length-2; i >= 0; i--) {
-      if(points[i][0]>=points[i+1][0]-1.0){
-        points[i+1][0]-=0.5;
-        points[i][0]=points[i+1][0]-1.5;
+      if(points[i][0]>=points[i+1][0]-min_dist){
+        points[i+1][0]-=min_dist;
+        points[i][0]=points[i+1][0]-min_dist*2;
       }
     }
 
@@ -216,7 +209,7 @@ function cleanPoints(){
 // right before and after the position we are looking fore
 // i'm sure this implementation can be improved by a lot!
 function pointAtPathX(lineidx, xpos) {
-  let before = [0,height/2];
+  let before = [-10e10,height/2];
   let after = [10e10,height/2];
   let line = lines[lineidx];
   for (var i =0; i < line.length; i++) {
