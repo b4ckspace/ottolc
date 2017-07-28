@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Spline Editor</title>
+<style>
+
+body {
+  font: 13px sans-serif;
+  position: relative;
+  width: 960px;
+  height: 500px;
+}
+
+rect {
+  fill: none;
+  pointer-events: all;
+}
+
+circle, .line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #fff;
+  fill-opacity: .2;
+  cursor: move;
+}
+
+.selected {
+  fill: #ff7f0e;
+  stroke: #ff7f0e;
+}
+
+</style>
+<script src="d3.v3.min.js"></script>
+<body></body>
+<script>
+
+let width = 960,
+    height = 500;
+
+//points for each servos movement. lines[0] is for animation keyframes
+//thats why we fix the y-position in mousemove
+let lines = [[],[],[],[],[]];
+
+let selected_line_idx = 0;
+
+let dragged = null,
+    selected = null;
+
+let colors = d3.scale.category10();
+
+
+let svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .on("mousedown", mousedown);
+
+for (var i = 0; i < lines.length; i++) {
+  let line = lines[i];
+  svg.append("path")
+      .datum(line)
+      .attr("class", "line")
+      .attr("id", `line${i}`)
+      .call(redraw);
+}
+d3.select(window)
+    .on("mousemove", mousemove)
+    .on("mouseup", mouseup)
+    .on("keydown", keydown);
+
+
+svg.node().focus();
+
+function redraw() {
+  cleanPoints();
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    let vline = d3.svg.line();
+    svg.select(`#line${i}`).attr("d", vline).style("stroke", colors(i));
+
+    if(i==0){
+      let framelines = svg.selectAll(".animationline").data(line);
+      framelines.enter().append("path")
+          .style("stroke", "black")
+          .attr("class", "animationline");
+      framelines.attr("d", (d)=>{
+        return d3.svg.line()([[d[0], 0], [d[0], height]])
+      });
+
+      framelines.exit().remove();
+    }
+
+    let circle = svg.selectAll(`.circle${i}`)
+        .data(line, function(d) { return d; });
+
+    ((i)=>{
+      circle.enter().append("circle")
+          .style("stroke", colors(i))
+          .attr("r", 1e-6)
+          .attr("class", `circle${i}`)
+          .on("mousedown", function(d) { selected_line_idx=i ;selected = dragged = d; redraw(); })
+        .transition()
+          .duration(750)
+          .ease("elastic")
+          .attr("r", 6.5);
+    })(i)
+
+    circle
+        .classed("selected", function(d) { return d === selected; })
+        .attr("cx", function(d) { return d[0]; })
+        .attr("cy", function(d) { return d[1]; });
+
+    circle.exit().remove();
+
+  }
+
+  if (d3.event) {
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+  }
+}
+
+function mousedown() {
+  let line = lines[selected_line_idx];
+  line.push(selected = dragged = d3.mouse(svg.node()));
+  line = line.sort(function(a,b){return  a[0]-b[0]})
+  redraw();
+}
+
+function mousemove() {
+  if (!dragged) return;
+  var m = d3.mouse(svg.node());
+  //pin the leftmost point to the left edge(an animation always has to start and end somewhere)
+  if( (dragged[0]!=0)&&(dragged[0]!=width) )
+    dragged[0] = Math.max(0, Math.min(width, m[0]));
+  dragged[1] = Math.max(0, Math.min(height, m[1]));
+  if(selected_line_idx==0){
+    dragged[1]=height/2;
+  }
+  redraw();
+}
+
+function mouseup() {
+  if (!dragged) return;
+  mousemove();
+  dragged = null;
+}
+
+//support deleting the selected point by pressing the specified keys
+function keydown() {
+  if (!selected) return;
+  let points = lines[selected_line_idx];
+  switch (d3.event.keyCode) {
+    case 8: // backspace
+    case 46: { // delete
+      var i = points.indexOf(selected);
+      points.splice(i, 1);
+      selected = points.length ? points[i > 0 ? i - 1 : 0] : null;
+      redraw();
+      break;
+    }
+  }
+}
+
+//ensure points are not on the same x coordinate and the points are in the right order
+function cleanPoints(){
+  for(let points of lines){
+
+    //implicitly allows moving several points to the right
+    for (var i = 1; i < (points.length); i++) {
+      if(points[i][0]<=points[i-1][0]){
+        points[i][0]=points[i-1][0]+0.5;
+      }
+    }
+    //uggly code to allow moving points to the left, not working propperly but better than nothing
+    for (var i = points.length-2; i >= 0; i--) {
+      if(points[i][0]>=points[i+1][0]-1.0){
+        points[i+1][0]-=0.5;
+        points[i][0]=points[i+1][0]-1.5;
+      }
+    }
+
+  }
+}
+
+</script>
