@@ -1,8 +1,12 @@
 var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+let viewerheight = 300;
+let viewerwidth  = 300;
+
+var camera = new THREE.PerspectiveCamera( 75, viewerheight / viewerwidth, 0.1, 1000 );
 
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setSize( viewerwidth, viewerheight );
 document.body.appendChild( renderer.domElement );
 
 var objects = []
@@ -22,6 +26,7 @@ for(const lpos of [[150,200,100],[-100, 200, -150],[0, -200, 0]]){
 
 var limbs = {};
 var lmash;
+var model_ready= false;
 loader.load( 'assets/3D print/OTTO_leg_v4.stl', function ( geometry ) {
 	var material = new THREE.MeshPhongMaterial( { color: Math.random() * 0xffffff} );
 	var ll = new THREE.Mesh( geometry, material );
@@ -81,13 +86,15 @@ loader.load( 'assets/3D print/OTTO_leg_v4.stl', function ( geometry ) {
 			ll.add(lfp);
 			rl.add(rfp);
 			scene.add(body);
-			var gui = new dat.GUI();
-			var lg = gui.addFolder('left');
-			lg.add(limbs.ll.rotation, 'z').step(0.01);
-			lg.add(lfp.rotation, 'x').step(0.01);
-			var rg = gui.addFolder('right');
-			rg.add(limbs.rl.rotation, 'z').step(0.01);
-			rg.add(rfp.rotation, 'x').step(0.01);
+
+			model_ready = true;
+			// var gui = new dat.GUI();
+			// var lg = gui.addFolder('left');
+			// lg.add(limbs.ll.rotation, 'z').step(0.01);
+			// lg.add(lfp.rotation, 'x').step(0.01);
+			// var rg = gui.addFolder('right');
+			// rg.add(limbs.rl.rotation, 'z').step(0.01);
+			// rg.add(rfp.rotation, 'x').step(0.01);
 		});
 	});
 });
@@ -106,9 +113,9 @@ function animate() {
 requestAnimationFrame(animate);
 
 function onWindowResize() {
-	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.aspect = viewerwidth / viewerheight;
 	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize( viewerwidth, viewerheight);
 }
 window.addEventListener( 'resize', onWindowResize, false );
 
@@ -125,3 +132,16 @@ function onDocumentMouseDown( event ) {
 	}
 }
 document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
+function setLeftLeg(angle){
+	limbs.ll.rotation.z = Math.PI + angle/90*0.5*Math.PI;
+}
+function setRightLeg(angle){
+	limbs.rl.rotation.z = Math.PI + angle/90*-0.5*Math.PI;
+}
+function setLeftFoot(angle){
+	limbs.lfp.rotation.x=Math.PI*0.5*angle/90
+}
+function setRightFoot(angle){
+	limbs.rfp.rotation.x=Math.PI*0.5*angle/90
+}

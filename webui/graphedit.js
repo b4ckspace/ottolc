@@ -22,7 +22,7 @@ let svg = d3.select("body").append("svg")
 svg.append("rect")
     .attr("width", width)
     .attr("height", height)
-    .attr("fill", "grey")
+    .attr("fill", "#efefef")
     .on("mousedown", mousedown);
 svg.append("path").datum([[0, height/2], [width, height/2]]).attr("d", d3.svg.line()).style("stroke", "black");
 svg.append("path").datum([[0, height], [width, height]]).attr("d", d3.svg.line()).style("stroke", "black");
@@ -189,6 +189,13 @@ function drawMPoints(){
   let pts = [1,2,3,4].map((i)=>{
     return pointAtPathX(i, mousepos[0]);
   });
+
+  if(model_ready){
+    setLeftLeg(   ((height-pts[0][1])-height/2)/(height/2)*90 );
+    setRightLeg(  ((height-pts[1][1])-height/2)/(height/2)*90 );
+    setLeftFoot(  ((height-pts[2][1])-height/2)/(height/2)*90 );
+    setRightFoot( ((height-pts[3][1])-height/2)/(height/2)*90 );
+  }
 
   let circle = svg.selectAll(".mousecircle")
     .data(pts, function(d) { return d; });
