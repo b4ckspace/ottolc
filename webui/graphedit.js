@@ -1,43 +1,3 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>Spline Editor</title>
-<style>
-
-
-rect {
-  pointer-events: all;
-}
-
-circle, .line {
-  fill: none;
-  stroke-width: 1.5px;
-}
-
-circle {
-  fill: #fff;
-  fill-opacity: .2;
-  cursor: move;
-}
-
-.mousecircle{
-  pointer-events: none;
-};
-
-.selected {
-  fill: #ff7f0e;
-  stroke: #ff7f0e;
-}
-
-.animationline{
-  stroke: black;
-  stroke-width: 1px;
-}
-
-</style>
-<script src="d3.v3.min.js"></script>
-<body></body>
-<script>
-
 let width = 960,
     height = 300;
 
@@ -241,5 +201,3 @@ function drawMPoints(){
     .attr("cy", function(d) { return d[1]; });
   circle.exit().remove();
 }
-
-</script>

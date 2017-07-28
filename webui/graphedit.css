@@ -1,0 +1,28 @@
+rect {
+  pointer-events: all;
+}
+
+circle, .line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+circle {
+  fill: #fff;
+  fill-opacity: .2;
+  cursor: move;
+}
+
+.mousecircle{
+  pointer-events: none;
+};
+
+.selected {
+  fill: #ff7f0e;
+  stroke: #ff7f0e;
+}
+
+.animationline{
+  stroke: black;
+  stroke-width: 1px;
+}
