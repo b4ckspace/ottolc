@@ -7,16 +7,10 @@ from tkinter.filedialog import asksaveasfilename, askopenfilename
 import json
 from .anim import Animtab
 from .config import Configtab
+import serial.tools.list_ports
 
 class App():
-    def __init__(self, master, serial_device=None):
-        if serial_device:
-            self.ser = serial.Serial(serial_device)
-            self.use_serial = True
-            self._initserial()
-        else:
-            self.use_serial = False
-
+    def __init__(self, master, serialDevice=None):
         tabs = ttk.Notebook(master)
 
         self.nosend = True
@@ -36,6 +30,26 @@ class App():
 
         self.nosend = False
         self.mov(None)
+
+        if not serialDevice:
+            serialDevice = self._findSerialPort()
+        if serialDevice:
+            self.ser = serial.Serial(serialDevice)
+            self.use_serial = True
+            self._initserial()
+        else:
+            self.use_serial = False
+
+    def _findSerialPort(self):
+        ports = serial.tools.list_ports.comports()
+        for i in range(0,len(ports)):
+            desc=ports[i].description
+            print(desc)
+            if desc.find("CH340", 0, len(desc)) >= 0:
+                print("FTDI found on %s" % (ports[i].device))
+                return ports[i].device
+        return False
+        
 
     def _initserial(self):
         self.ser.timeout=0.1
