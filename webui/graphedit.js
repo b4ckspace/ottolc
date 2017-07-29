@@ -104,7 +104,10 @@ function redraw() {
           .style("stroke", colors(i))
           .attr("r", 1e-6)
           .attr("class", `circle${i} drag`)
-          .on("mousedown", function(d) { selected_line_idx=i ;selected = dragged = d; redraw(); })
+          .on("mousedown", function(d) {
+            selected_line_idx=i;
+            document.getElementById(`radio${i}`).checked=true;
+            selected = dragged = d; redraw(); })
         .transition()
           .duration(750)
           .ease("elastic")
