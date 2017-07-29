@@ -98,6 +98,7 @@ loader.load( 'assets/3D print/OTTO_leg_v4.stl', function ( geometry ) {
 			// var rg = gui.addFolder('right');
 			// rg.add(limbs.rl.rotation, 'z').step(0.01);
 			// rg.add(rfp.rotation, 'x').step(0.01);
+			model_loaded();
 		});
 	});
 });

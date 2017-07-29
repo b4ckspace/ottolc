@@ -9,7 +9,7 @@ let width = 5000,
 let lines = [[],[],[],[],[],[],[],[],[]];
 
 var mousepos = [0, 0];
-
+let maybe_changed = false;
 let selected_line_idx = 1;
 
 let dragged = null,
@@ -127,6 +127,7 @@ function redraw() {
 }
 
 function mousedown() {
+  maybe_changed=true;
   let line = lines[selected_line_idx];
   line.push(selected = dragged = d3.mouse(svg.node()));
   line = line.sort(function(a,b){return  a[0]-b[0]})
@@ -140,6 +141,7 @@ function mousemove() {
     return
   mousepos = pos;
   if (dragged){
+    maybe_changed=true;
     let m = mousepos;
     dragged[0] = Math.max(0, Math.min(width, m[0]));
     dragged[1] = Math.max(0, Math.min(height, m[1]));
@@ -156,6 +158,7 @@ function mouseup() {
   if (!dragged) return;
   mousemove();
   dragged = null;
+  maybe_changed=true;
 }
 
 //support deleting the selected point by pressing the specified keys
@@ -168,6 +171,7 @@ function keydown() {
       var i = points.indexOf(selected);
       points.splice(i, 1);
       selected = points.length ? points[i > 0 ? i - 1 : 0] : null;
+      maybe_changed=true;
       redraw();
       break;
     }
@@ -241,7 +245,7 @@ function drawMPoints(){
 }
 
 //how many px are 1 ms
-var tscale = 5;
+var tscale = 2;
 var fisttspos = 0;
 function xposToTs(xpos) {
   return (xpos-fisttspos)*tscale;
