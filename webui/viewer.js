@@ -139,7 +139,7 @@ function setLeftLeg(angle){
 	limbs.ll.rotation.z = Math.PI + angle/90*0.5*Math.PI;
 }
 function setRightLeg(angle){
-	limbs.rl.rotation.z = Math.PI + angle/90*-0.5*Math.PI;
+	limbs.rl.rotation.z = Math.PI + angle/90*0.5*Math.PI;
 }
 function setLeftFoot(angle){
 	limbs.lfp.rotation.x=Math.PI*0.5*angle/90
