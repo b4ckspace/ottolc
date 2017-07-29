@@ -26,3 +26,14 @@ circle {
   stroke: black;
   stroke-width: 1px;
 }
+
+#graphedit{
+  overflow-x: scroll;
+  width: 900px;
+}
+div{
+  float:left;
+}
+.tstext{
+  font-size:8pt;
+}

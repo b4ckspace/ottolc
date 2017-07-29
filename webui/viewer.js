@@ -7,7 +7,8 @@ var camera = new THREE.PerspectiveCamera( 75, viewerheight / viewerwidth, 0.1, 1
 
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( viewerwidth, viewerheight );
-document.body.appendChild( renderer.domElement );
+document.getElementById("view").appendChild( renderer.domElement );
+// document.body.appendChild( renderer.domElement );
 
 var objects = []
 let raycaster = new THREE.Raycaster();
