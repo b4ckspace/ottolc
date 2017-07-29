@@ -29,6 +29,12 @@ class Configtab():
             command=self.app.resetTrim).grid(
             row=5,
             column=0)
+        tkinter.Button(
+            master,
+            text="Get OttO-LC Info",
+            command=self.app.getInfo).grid(
+            row=0,
+            column=1)
 
 
 

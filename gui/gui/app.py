@@ -125,7 +125,7 @@ class App():
             if line and line[0] == ord('.'):
                 if verbose == True:
                     print ("found valid resonse: %s" % (line))
-                splitline = line.split(b' + ')
+                splitline = line.split(b' ')
                 if len(splitline) > 1:
                     response = splitline[1]
         return response
@@ -137,6 +137,8 @@ class App():
         pos = response.split(b' ')
         posInt = 4 * [0]
         for i in range(0, len(pos)):
+            if pos[i] == b'':
+                pos[i] = 0
             posInt[i]=int(pos[i])
         posInt[0] += self.animwidget.getrf()
         posInt[1] += self.animwidget.getlf()
@@ -144,7 +146,6 @@ class App():
         posInt[3] += self.animwidget.getll()
         cmdstr = "! settrims %d %d %d %d\n" % (posInt[0], posInt[1], posInt[2], posInt[3])
         response = self._sendcmd(cmdstr)
-        #print(response)
         self.animwidget.resetServos()
         self.testTrim()
     
@@ -154,6 +155,10 @@ class App():
 
     def testTrim(self):
         cmdstr = "trimtest\n" # needs to get an api command!!!
+        self._sendcmd(cmdstr)
+
+    def getInfo(self):
+        cmdstr = "! getinfo\n" # needs to get an api command!!!
         self._sendcmd(cmdstr)
         
     # def log

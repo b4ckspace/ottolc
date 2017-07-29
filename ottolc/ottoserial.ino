@@ -12,7 +12,7 @@ bool isDebug(){
   }
 }
 
-int testvars[10] = {10,500,500,0,0,0,0,0,0,0};
+
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
@@ -43,22 +43,6 @@ void replSetServo(String args){
     break;
   }
   setServo(servo, degree);
-  Serial.println(F("Ok"));
-}
-
-void setTVar(String args){
-  Serial.println(F("setting testvar"));
-  int varnr;
-  int value;
-  int matches = sscanf(args.c_str(), "%d %d", &varnr, &value);
-  if(matches!=2){
-    Serial.print(matches);
-    Serial.print(F("could not parse arguments: '"));
-    Serial.print(args);
-    Serial.println("'");
-    return;
-  }
-  testvars[varnr] = value;
   Serial.println(F("Ok"));
 }
 
@@ -173,8 +157,6 @@ void doCommand(String line){
     replTrimtest();
   }else if(command=="printservos"||command=="ps"){
     replPrintServos();
-  }else if(command=="tset"){
-    setTVar(args);
   }else if(command=="e"){
     Serial.println(F("echo? "));
     sensorfoo();
