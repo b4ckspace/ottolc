@@ -1,3 +1,6 @@
+//this file manages the graph editor for managing motor movement over time and provides hlper functions
+// for importing and exporting functions
+
 let width = 5000,
     height = 300;
 
@@ -24,6 +27,7 @@ svg.append("rect")
     .attr("height", height)
     .attr("fill", "#efefef")
     .on("mousedown", mousedown);
+svg.append("text").attr("class", "mousetext")
 svg.append("path").datum([[0, height/2], [width, height/2]]).attr("d", d3.svg.line()).style("stroke", "black");
 svg.append("path").datum([[0, height], [width, height]]).attr("d", d3.svg.line()).style("stroke", "black");
 svg.append("path").datum([[0, 0], [width, 0]]).attr("d", d3.svg.line()).style("stroke", "black");
@@ -60,7 +64,11 @@ function redraw() {
     lines[8].push(pointAtPathX(4,p[0]))
   }
 
-   
+  svg.selectAll(".mousetext")
+            .datum(mousepos)
+            .attr("x", function(d) { return d[0]+10; })
+            .attr("y", function(d) { return d[1]+10; })
+            .text((d)=>{return Math.floor( ((height-d[1])-height/2)/(height/2)*90) })
 
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i];
@@ -113,12 +121,6 @@ function redraw() {
   }
 
   drawMPoints();
-
-  if (d3.event) {
-    d3.event.preventDefault();
-    d3.event.stopPropagation();
-  }
-
 }
 
 function mousedown() {
@@ -141,10 +143,8 @@ function mousemove() {
     if(selected_line_idx==0){
       dragged[1]=height/2;
     }
-    redraw();
-  }else{
-    drawMPoints();
   }
+  redraw();
 }
 
 
@@ -289,6 +289,7 @@ function importAnim(rawdata){
     lines[3].push([xpos, (height/2)+((height/2)*leftFoot)])
     lines[4].push([xpos, (height/2)+((height/2)*rightFoot)])
   }
-  console.log(lines)
-  redraw()
+  redraw();
+  //this fixes the paths not being drawn. we need to figure out the reason sometime
+  redraw();
 }

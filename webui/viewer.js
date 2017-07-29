@@ -1,3 +1,5 @@
+// this file manages the 3d preview of the bot and provides helper functions to set the bots joints
+
 var scene = new THREE.Scene();
 
 let viewerheight = 300;
@@ -121,7 +123,6 @@ function onWindowResize() {
 window.addEventListener( 'resize', onWindowResize, false );
 
 function onDocumentMouseDown( event ) {
-	event.preventDefault();
 	let mouse = {};
 	mouse.x = ( event.clientX / renderer.domElement.clientWidth ) * 2 - 1;
 	mouse.y = - ( event.clientY / renderer.domElement.clientHeight ) * 2 + 1;
@@ -132,7 +133,7 @@ function onDocumentMouseDown( event ) {
 		intersects[ 0 ].object.material.color.setHex( Math.random() * 0xffffff );
 	}
 }
-document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+document.addEventListener( 'mousedown', onDocumentMouseDown);
 
 function setLeftLeg(angle){
 	limbs.ll.rotation.z = Math.PI + angle/90*0.5*Math.PI;
