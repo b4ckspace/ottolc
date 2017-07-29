@@ -262,7 +262,7 @@ function exportAnim(){
   let lasttime = 0;
   for(let keyframe of lines[0]){
     let newtime = xposToTs(keyframe[0]);
-    let deltatime = newtime - lasttime;
+    let deltatime = Math.round(newtime - lasttime);
     lasttime = newtime;
     let pts = [1,2,3,4].map((i)=>{
       return pointAtPathX(i, keyframe[0]);
