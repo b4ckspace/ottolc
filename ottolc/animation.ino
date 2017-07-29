@@ -77,6 +77,23 @@ void resetAnimation(){
 
     animend = true;
 }
+
+//TODO: add params
+bool addAnimationCallback(AnimationCallback::AnimFun callback);
+bool addAnimationCallback(AnimationCallback::AnimFun callback){
+    if(whead==rhead){
+        Serial.println(F("Animation ringbuffer full, dropping Animation callback"));
+        beep();
+        return 1;
+    }
+    whead->data.cb.fun = callback;
+    whead++;
+    if(whead==&frames[ARBSIZE]){
+        whead=&frames[0];
+    }
+    return 0;
+}
+
 bool addAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg, uint8_t rightLeg, uint16_t time){
     if(whead==rhead){
         Serial.println(F("Animation ringbuffer full, dropping Animation"));

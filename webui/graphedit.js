@@ -275,6 +275,48 @@ function exportAnim(){
   }
   return ret;
 }
+function exportCode(){
+  //generates code to be put in a 
+  let ret = []
+  let lasttime = 0;
+  for(let keyframe of lines[0]){
+    let newtime = xposToTs(keyframe[0]);
+    let deltatime = Math.round(newtime - lasttime);
+    lasttime = newtime;
+    let pts = [1,2,3,4].map((i)=>{
+      return pointAtPathX(i, keyframe[0]);
+    });
+    let leftLeg   = Math.round( ((height-pts[0][1])-height/2)/(height/2)*90 )+90;
+    let rightLeg  = Math.round( ((height-pts[1][1])-height/2)/(height/2)*90 )+90;
+    let leftFoot  = Math.round( ((height-pts[2][1])-height/2)/(height/2)*90 )+90;
+    let rightFoot = Math.round( ((height-pts[3][1])-height/2)/(height/2)*90 )+90;
+    ret.push(`prependAnimationFrame(${leftFoot}, ${rightFoot}, ${leftLeg}, ${rightLeg}, ${deltatime});`)
+  }
+
+  return ret.reverse().join("\n");
+}
+function exportAnim(){
+  //output format:
+  //array of strings that represent animation keyframes.
+  //keyframe format: &rightFootv, &leftFootv, &rightLegv, &leftLegv, &duration
+  //note that our internal representation is absolute timestamps while keyframes take timedeltas
+  let ret = []
+  let lasttime = 0;
+  for(let keyframe of lines[0]){
+    let newtime = xposToTs(keyframe[0]);
+    let deltatime = Math.round(newtime - lasttime);
+    lasttime = newtime;
+    let pts = [1,2,3,4].map((i)=>{
+      return pointAtPathX(i, keyframe[0]);
+    });
+    let leftLeg   = Math.round( ((height-pts[0][1])-height/2)/(height/2)*90 );
+    let rightLeg  = Math.round( ((height-pts[1][1])-height/2)/(height/2)*90 );
+    let leftFoot  = Math.round( ((height-pts[2][1])-height/2)/(height/2)*90 );
+    let rightFoot = Math.round( ((height-pts[3][1])-height/2)/(height/2)*90 );
+    ret.push(`${rightFoot} ${leftFoot} ${rightLeg} ${leftLeg} ${deltatime}`)
+  }
+  return ret;
+}
 
 function importAnim(rawdata){
   let full_time = 0;

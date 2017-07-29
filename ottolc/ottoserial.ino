@@ -284,6 +284,24 @@ void apiCommand(String line){
       resetAnimation();
     }else if(command=="playanim"){
       startAnimation();
+    // the gui can use this to query the build in functions that can be used as animation callback
+    }else if(command=="supportedanims"){
+      result = "basic_step";
+
+    // push a callback instead of a keyframe
+    }else if(command=="pushcallback"){
+      bool addAnimationCallback(AnimationCallback::AnimFun callback);
+
+      bool found = false;
+      if(args=="basic_step"){
+        found=true;
+        addAnimationCallback(basic_step);
+      }
+      if(!found){
+        result = "no callback with that name found";
+        returncode = 23;
+      }
+
     }else if(command=="servosoff"){
       disableServos();
       result = "servos switched off";
