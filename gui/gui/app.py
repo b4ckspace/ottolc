@@ -118,18 +118,28 @@ class App():
         
 
     def saveTrim(self):
-        print("saving trim...")
         cmdstr = "! gettrims\n"
         response = self._sendcmd(cmdstr)
-        """
-        responselist = response.split(b'\n')
-        for line in responselist:
-            if line[-1:] == b'\r':
-                line = line[:-1]
-            print("response: %s" % (line))
-        """
-        #print("foo: " + str(self.getResponse(response, True)))
-        print("old trim: %s" % (response))
+        pos = response.split(b' ')
+        posInt = 4 * [0]
+        for i in range(0, len(pos)):
+            posInt[i]=int(pos[i])
+        posInt[0] += self.animwidget.getrf()
+        posInt[1] += self.animwidget.getlf()
+        posInt[2] += self.animwidget.getrl()
+        posInt[3] += self.animwidget.getll()
+        cmdstr = "! settrims %d %d %d %d\n" % (posInt[0], posInt[1], posInt[2], posInt[3])
+        response = self._sendcmd(cmdstr)
         #print(response)
+        self.animwidget.resetServos()
+        self.testTrim()
+    
+    def resetTrim(self):
+        cmdstr = "! settrims 0 0 0 0\n"
+        self._sendcmd(cmdstr)
+
+    def testTrim(self):
+        cmdstr = "trimtest\n" # needs to get an api command!!!
+        self._sendcmd(cmdstr)
         
     # def log
