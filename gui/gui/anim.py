@@ -9,9 +9,22 @@ from parse import parse
 class Animtab():
     def __init__(self, master, app):
         self.app = app
-            
+
         frame = tkinter.Frame(master)
 
+
+        self.ll = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
+                                orient=tkinter.HORIZONTAL, label="left leg")
+        self.ll.set(0)
+        self.ll.grid(row=0, column=0)
+
+        self.rl = tkinter.Scale(master, from_=-90, to=90,
+                                resolution=1, length=200, command=self.app.mov,
+                                orient=tkinter.HORIZONTAL, label="right leg")
+        self.rl.set(0)
+        self.rl.grid(row=0, column=1)
+        
         self.lf = tkinter.Scale(master, from_=-90, to=90,
                                 resolution=1, length=200, command=self.app.mov,
                                 orient=tkinter.HORIZONTAL, label="left foot")
@@ -24,19 +37,8 @@ class Animtab():
         self.rf.set(0)
         self.rf.grid(row=1, column=1)
 
-        self.rl = tkinter.Scale(master, from_=-90, to=90,
-                                resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="right leg")
-        self.rl.set(0)
-        self.rl.grid(row=0, column=1)
-        self.ll = tkinter.Scale(master, from_=-90, to=90,
-                                resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="left leg")
-        self.ll.set(0)
-        self.ll.grid(row=0, column=0)
-
         self.ts = tkinter.Scale(master, from_=1, to=1000, length=200,
-                                orient=tkinter.VERTICAL, label="animdur")
+                                orient=tkinter.VERTICAL, label="time")
         self.ts.set(500)
         self.ts.grid(row=0, column=2, rowspan=2)
 
@@ -84,9 +86,11 @@ class Animtab():
             row=3,
             column=4)
 
+        
         self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
         self.framelist.grid(row=0, column=4, rowspan=2)
         self.framelist.bind('<Double-Button-1>', self.loadset)
+    
 
         #self.nosend = False
         #self.app.mov(None)
