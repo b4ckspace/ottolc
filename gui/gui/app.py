@@ -64,32 +64,6 @@ class App():
         except Exception as e:
             raise
 
-    def _sendcmd(self, cmd):
-        print("cmd: " + str(cmd))
-        response = b''
-        if self.use_serial:
-            self.ser.write(cmd.encode('utf-8'))
-            try:
-                while True:
-                    line = self.ser.readline()
-                    if len(line)==0:
-                        break
-
-                    #print(line)
-                    response += line
-                    if line[0]==ord('.'):
-                        #print("***************")
-                        response += b'***************'
-                        break
-                #print(output)
-                #return self.getResponse(response, True)
-                return self.getResponse(response)
-
-            except Exception as e:
-                raise
-        else:
-            print(cmd[0:-1])
-
 
     def calcabspos(self,pos):
         ## depricated function, because absPos is calculated in ottolc arduino code
@@ -118,29 +92,66 @@ class App():
             
         self._sendcmd(cmdstr)
 
+
+    def _sendcmd(self, cmd, verbose = False):
+        if verbose == True:
+            print("<<<<<<<<<< New Command >>>>>>>>>>")
+        print("_sendcmd > command sent: " + str(cmd))
+        response = b''
+        if self.use_serial:
+            self.ser.write(cmd.encode('utf-8'))
+            try:
+                while True:
+                    line = self.ser.readline()
+                    if len(line)==0:
+                        break
+                    if verbose == True:
+                        print("_sendcmd > readline: " + str(line))
+                    response += line
+                    if line[0]==ord('.'):
+                        if verbose == True:
+                            response += b'***************' # useless output
+                        break
+                #print(output)
+                if verbose == True:
+                    print("_sendcmd > E N D")
+                return self.getResponse(response, True)
+                #return self.getResponse(response)
+
+            except Exception as e:
+                raise
+        else:
+            print(cmd[0:-1])
+            
     def getResponse(self, serialResponse, verbose = False):
+        if verbose == True:
+            print("getResponse > called")
         response = b''
         responselist = serialResponse.split(b'\n')
         for line in responselist:
             if line[-1:] == b'\r':
                 line = line[:-1]
             if verbose == True:
-                print("response-line: %s" % (line))
+                print("getResponse > response-line: %s" % (line))
             if line and line[0] == ord('.'):
                 if verbose == True:
-                    print ("found valid resonse: %s" % (line))
+                    print ("getResponse > found valid response: %s" % (line))
                 if line[:3] == b'.0 ':
                     line = line[3:]
                 response=line
         if verbose == True:
-            print("response-total: %s" % (response))
+            print("getResponse > final response: %s" % (response))
         return response
         
 
-    def saveTrim(self):
+    def saveTrim(self, verbose = False):
+        verbose=True
+        if verbose == True:
+            print("saveTrim > called")
         cmdstr = "! gettrims\n"
-        response = self._sendcmd(cmdstr)
-        print(response)
+        response = self._sendcmd(cmdstr, True)
+        if verbose == True:
+            print("saveTrim > Response from _sendcmd: %s" % (response))
         pos = response.split(b' ')
         posInt = 4 * [0]
         for i in range(0, len(pos)):
