@@ -9,6 +9,8 @@ from .anim import Animtab
 from .config import Configtab
 import serial.tools.list_ports
 
+import re
+
 class App():
     def __init__(self, master, serialDevice=None):
         tabs = ttk.Notebook(master)
@@ -72,6 +74,7 @@ class App():
                     line = self.ser.readline()
                     if len(line)==0:
                         break
+
                     #print(line)
                     response += line
                     if line[0]==ord('.'):
@@ -81,6 +84,7 @@ class App():
                 #print(output)
                 #return self.getResponse(response, True)
                 return self.getResponse(response)
+
             except Exception as e:
                 raise
         else:
@@ -121,19 +125,22 @@ class App():
             if line[-1:] == b'\r':
                 line = line[:-1]
             if verbose == True:
-                print("response: %s" % (line))
+                print("response-line: %s" % (line))
             if line and line[0] == ord('.'):
                 if verbose == True:
                     print ("found valid resonse: %s" % (line))
-                splitline = line.split(b' ')
-                if len(splitline) > 1:
-                    response = splitline[1]
+                if line[:3] == b'.0 ':
+                    line = line[3:]
+                response=line
+        if verbose == True:
+            print("response-total: %s" % (response))
         return response
         
 
     def saveTrim(self):
         cmdstr = "! gettrims\n"
         response = self._sendcmd(cmdstr)
+        print(response)
         pos = response.split(b' ')
         posInt = 4 * [0]
         for i in range(0, len(pos)):
@@ -154,11 +161,19 @@ class App():
         self._sendcmd(cmdstr)
 
     def testTrim(self):
-        cmdstr = "trimtest\n" # needs to get an api command!!!
+        cmdstr = "! trimtest\n"
         self._sendcmd(cmdstr)
 
     def getInfo(self):
-        cmdstr = "! getinfo\n" # needs to get an api command!!!
-        self._sendcmd(cmdstr)
+        cmdstr = "! getinfo\n"
+        response = self._sendcmd(cmdstr)
+        pos = response.split(b' ')
+        posInt = 2 * [0]
+        for i in range(0, len(pos)):
+            if pos[i] == b'':
+                pos[i] = 0
+            posInt[i]=int(pos[i])
+        print("Firmware Version: %s" % (posInt[0]))
+        print("API Version: %s" % (posInt[1]))
         
     # def log
