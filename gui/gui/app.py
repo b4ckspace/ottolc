@@ -98,51 +98,26 @@ class App():
         if verbose == True:
             print("<<<<<<<<<< New Command >>>>>>>>>>")
         print("_sendcmd > command sent: " + str(cmd))
-        response = b''
         if self.use_serial:
             self.ser.write(cmd.encode('utf-8'))
-            try:
-                while True:
-                    line = self.ser.readline()
-                    if len(line)==0:
-                        break
-                    if verbose == True:
-                        print("_sendcmd > readline: " + str(line))
-                    response += line
-                    if line[0]==ord('.'):
-                        if verbose == True:
-                            response += b'***************' # useless output
-                        break
-                #print(output)
+            while True:
+                line = self.ser.readline().strip()
                 if verbose == True:
-                    print("_sendcmd > E N D")
-                return self.getResponse(response, True)
-                #return self.getResponse(response)
-
-            except Exception as e:
-                raise
+                    print("_sendcmd > readline: " + str(line))
+                if len(line)<1:
+                    continue
+                if line[0]!=ord('.'):
+                    continue
+                if line[:2] == b'.0':
+                    line = line[2:]
+                else:
+                    raise Exception(line)
+                if verbose == True:
+                    print("getResponse > final response: %s" % (line))
+                print("_sendcmd > END")
+                return line.strip()
         else:
             print(cmd[0:-1])
-            
-    def getResponse(self, serialResponse, verbose = False):
-        if verbose == True:
-            print("getResponse > called")
-        response = b''
-        responselist = serialResponse.split(b'\n')
-        for line in responselist:
-            if line[-1:] == b'\r':
-                line = line[:-1]
-            if verbose == True:
-                print("getResponse > response-line: %s" % (line))
-            if line and line[0] == ord('.'):
-                if verbose == True:
-                    print ("getResponse > found valid response: %s" % (line))
-                if line[:3] == b'.0 ':
-                    line = line[3:]
-                response=line
-        if verbose == True:
-            print("getResponse > final response: %s" % (response))
-        return response
         
 
     def saveTrim(self, verbose = False):
