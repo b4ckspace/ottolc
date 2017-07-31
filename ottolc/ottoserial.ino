@@ -5,14 +5,16 @@ bool isDebug(){
   delay(2000);  
   if(Serial.available()){
     digitalWrite(13, HIGH);
-    Serial.println(F("Hello my name is otto, version 0.0.1"));
+    Serial.println(F("I am otto, version 0.0.1"));
     Serial.readStringUntil('\n'); // Clear serial buffer
     Serial.setTimeout(20);
     Serial.print(F("enter command: ")); 
   }
 }
 
-int testvars[10] = {10,500,500,0,0,0,0,0,0,0};
+int apiVersion = 2;
+int fwVersion = 1;
+
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
@@ -43,22 +45,6 @@ void replSetServo(String args){
     break;
   }
   setServo(servo, degree);
-  Serial.println(F("Ok"));
-}
-
-void setTVar(String args){
-  Serial.println(F("setting testvar"));
-  int varnr;
-  int value;
-  int matches = sscanf(args.c_str(), "%d %d", &varnr, &value);
-  if(matches!=2){
-    Serial.print(matches);
-    Serial.print(F("could not parse arguments: '"));
-    Serial.print(args);
-    Serial.println("'");
-    return;
-  }
-  testvars[varnr] = value;
   Serial.println(F("Ok"));
 }
 
@@ -99,7 +85,7 @@ void replSetTrim(String args){
 
 void replTrimtest(){
   for(int i=0;i<4;i++){
-    servo[i].SetPosition(60);
+    servo[i].SetPosition(65);
   }
   delay(500);
   resetServos();
@@ -164,8 +150,6 @@ void doCommand(String line){
     Serial.println(F("servos reseted"));
   }else if(command=="beep"){
     beep();
-  }else if(command=="trimtest"){
-    replTrimtest();
   }else if(command=="play"){
     startAnimation();
   }else if(command=="settrim"||command=="st"){
@@ -173,8 +157,6 @@ void doCommand(String line){
     replTrimtest();
   }else if(command=="printservos"||command=="ps"){
     replPrintServos();
-  }else if(command=="tset"){
-    setTVar(args);
   }else if(command=="e"){
     Serial.println(F("echo? "));
     sensorfoo();
@@ -232,7 +214,14 @@ void apiCommand(String line){
     }else if(command=="maxframes"){
       result=ARBSIZE;
     }else if(command=="apiversion"){
-      result="0002";
+      result = apiVersion;
+    }else if(command=="fwversion"){
+      result = fwVersion;
+    }else if(command=="getinfo"){
+      memset(printbuf,0,PBUFSZ);
+      snprintf(printbuf, PBUFSZ, "%d %d", fwVersion, apiVersion);
+      //snprintf(printbuf, PBUFSZ, "Versions 1 2");
+      result=printbuf;
     }else if(command=="gettrims"){
       char getTrimdata(EServo servo);
       memset(printbuf,0,PBUFSZ);
@@ -251,6 +240,8 @@ void apiCommand(String line){
         setTrimdata(leftLeg, d);
         result="trim data set";
       }
+    }else if(command=="trimtest"){
+      replTrimtest();
     }else if(command=="getservos"){
       int getServo(EServo servo);
       memset(printbuf,0,PBUFSZ);

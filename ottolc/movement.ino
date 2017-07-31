@@ -122,7 +122,7 @@ void verifyTrimdata(){
   char data[4] = {a,b,c,d};
   char chk2 = badChecksum(data, 4);
   if(chk!=chk2){
-    Serial.println(F("Trimdata checksum verification failed."));
+    Serial.println(F("Trimdata checksum invalid"));
     char zdata[] = {0,0,0,0};
     char zsum = badChecksum(zdata, 4);
     writeSetting(trimLeftFoot, 0);
@@ -131,7 +131,7 @@ void verifyTrimdata(){
     writeSetting(trimRightLeg, 0);
     writeSetting(trimChecksum, zsum);
   }else{
-    Serial.println(F("Trim data checksum ok"));
+    Serial.println(F("Trimdata checksum ok"));
   }
 }
 
