@@ -11,3 +11,8 @@ void basic_step(void*){
     prependAnimationFrame(155, 125, 90, 90, 50);
     prependAnimationFrame(155, 125, 90, 90, 160);
 }
+
+void keep_walking(void*){
+    prependAnimationCallback(keep_walking);
+    prependAnimationCallback(basic_step);
+}

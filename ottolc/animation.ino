@@ -10,10 +10,31 @@ AnimStep_t *whead;
 int16_t animPos;
 AnimKeyframe startpos;
 
+inline bool can_append(){
+    if(is_empty)
+        return true;
+    if(whead==(rhead-1))
+        return false;
+    if( (rhead==&frames[ARBSIZE-1]) && (whead==&frames[0]) )
+        return false;
+    return true;
+}
+inline bool can_prepend(){
+    if(is_empty)
+        return true;
+    if(rhead==(whead-1))
+        return false;
+    if( (whead==&frames[ARBSIZE-1]) && (rhead==&frames[0]) )
+        return false;
+    return true;
+}
+inline bool is_empty(){
+    return rhead==whead;
+}
+
 bool animend;
 
 void initAnim(){
-    whead = &frames[1];
     resetAnimation();
 }
 
@@ -21,14 +42,24 @@ void initAnim(){
 int getServo(EServo servon);
 void setServo(EServo servon, int value);
 bool in_anim_callback = false;
+
+
+
 void AnimStep(int16_t ms){
+    if(animend)
+        return;
     if(!(rhead->options & (1<<AnimStep_t::IS_FRAME))){
         in_anim_callback = true;
-        rhead++;
         //copy funptr and args so we dont overwrite data on front insert
         AnimationCallback cbinfo = rhead->data.cb;
+        rhead++;
+        if(rhead>=&frames[ARBSIZE]){
+            rhead=&frames[0];
+        }
         cbinfo.fun(cbinfo.args);
         in_anim_callback = false;
+        AnimStep(ms);
+        return;
     }
 
     uint16_t endtime = min(animPos+ms, rhead->data.keyframe.duration);
@@ -42,7 +73,7 @@ void AnimStep(int16_t ms){
     animPos += ms;
 
     if(animPos>rhead->data.keyframe.duration){
-        if( (rhead==(whead-1))||((rhead==&frames[ARBSIZE-1])&&(whead==&frames[0]) ) ){
+        if( is_empty()){
             Serial.println(F("Animation ringbuffer empty, staying in last pos"));
             animend = true;
             return;
@@ -57,10 +88,7 @@ void AnimStep(int16_t ms){
 }
 
 void resetAnimation(){
-    rhead = whead -1;
-    if(rhead < frames){
-        rhead = &frames[ARBSIZE-1];
-    }
+    rhead = whead = &frames[0];
     animPos=1;
     rhead->options = 1<<AnimStep_t::IS_FRAME;
     rhead->data.keyframe.duration=500;
@@ -81,12 +109,13 @@ void resetAnimation(){
 //TODO: add params
 bool addAnimationCallback(AnimationCallback::AnimFun callback);
 bool addAnimationCallback(AnimationCallback::AnimFun callback){
-    if(whead==rhead){
-        Serial.println(F("Animation ringbuffer full, dropping Animation callback"));
+    if(!can_append()){
+        Serial.println(F("Animation ringbuffer full, dropping addAnimationCallback"));
         beep();
         return 1;
     }
     whead->data.cb.fun = callback;
+    whead->options = 0;
     whead++;
     if(whead==&frames[ARBSIZE]){
         whead=&frames[0];
@@ -94,9 +123,34 @@ bool addAnimationCallback(AnimationCallback::AnimFun callback){
     return 0;
 }
 
+//TODO: add params
+bool prependAnimationCallback(AnimationCallback::AnimFun callback);
+bool prependAnimationCallback(AnimationCallback::AnimFun callback){
+    if(!in_anim_callback){
+        Serial.println(F("prepend called but not in animation callback"));
+        beep();
+        return 1;
+    }
+
+    if(!can_prepend()){
+        Serial.println(F("Animation ringbuffer full, dropping prependAnimationCallback"));
+        beep();
+        return 1;
+    }
+
+    rhead--;
+
+    if(rhead<&frames[0]){
+        rhead=&frames[ARBSIZE-1];
+    }
+    rhead->data.cb.fun = callback;
+    rhead->options = 0;
+    return 0;
+}
+
 bool addAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg, uint8_t rightLeg, uint16_t time){
-    if(whead==rhead){
-        Serial.println(F("Animation ringbuffer full, dropping Animation"));
+    if(!can_append()){
+        Serial.println(F("Animation ringbuffer full, dropping addAnimationFrame"));
         beep();
         return 1;
     }
@@ -120,8 +174,8 @@ bool prependAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg,
         return 1;
     }
 
-    if(whead==rhead){
-        Serial.println(F("Animation ringbuffer full, dropping Animation"));
+    if(!can_prepend()){
+        Serial.println(F("Animation ringbuffer full, dropping prependAnimationFrame"));
         beep();
         return 1;
     }
@@ -130,11 +184,6 @@ bool prependAnimationFrame(uint8_t leftFoot, uint8_t rightFoot, uint8_t leftLeg,
 
     if(rhead<&frames[0]){
         rhead=&frames[ARBSIZE-1];
-    }
-    if(whead==rhead){
-        Serial.println(F("Animation ringbuffer full, dropping Animation"));
-        beep();
-        return 1;
     }
 
     rhead->options = 1<<AnimStep_t::IS_FRAME;
