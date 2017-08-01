@@ -219,7 +219,7 @@ void apiCommand(String line){
       result = fwVersion;
     }else if(command=="getinfo"){
       memset(printbuf,0,PBUFSZ);
-      snprintf(printbuf, PBUFSZ, "%d %d", fwVersion, apiVersion);
+      snprintf(printbuf, PBUFSZ, "%d %d %s", fwVersion, apiVersion, __DATE__);
       //snprintf(printbuf, PBUFSZ, "Versions 1 2");
       result=printbuf;
     }else if(command=="gettrims"){

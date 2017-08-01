@@ -154,13 +154,18 @@ class App():
     def getInfo(self):
         cmdstr = "! getinfo\n"
         response = self._sendcmd(cmdstr)
+        print(response)
         pos = response.split(b' ')
-        posInt = 2 * [0]
+        #posInt = 2 * [0]
+        posInt = []
+        #for i in range(0, len(pos)):
         for i in range(0, len(pos)):
-            if pos[i] == b'':
-                pos[i] = 0
-            posInt[i]=int(pos[i])
+            #if pos[i] == b'':
+            #    pos[i] = 0
+            #posInt[i]=int(pos[i])
+            posInt.append(pos[i])
         print("Firmware Version: %s" % (posInt[0]))
         print("API Version: %s" % (posInt[1]))
+        print("Compile date: %s" % (posInt[2:]))
         
     # def log
