@@ -9,7 +9,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial){}
   initMovement();
-  //initBuzzer();
+  initBuzzer();
   initAnim();
   // initSensors();
 }
@@ -23,4 +23,5 @@ void loop() {
       latestAnimStep = millis();
     }
   }
+  softTone();
 }

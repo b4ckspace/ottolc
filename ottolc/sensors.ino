@@ -25,7 +25,7 @@ void obstacleAvoidance(){
 		if((now-lastping)>100)
 			sensorfoo();
 	}else{
-		if((now-lastping)>500){
+		if((now-lastping)>1000){
 			lastping = millis();
 			sensorfoo();
 		}
