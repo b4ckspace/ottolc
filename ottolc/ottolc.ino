@@ -2,12 +2,14 @@
 
 */
 
+unsigned long latestAnimStep = 0;
+long animation_step_ms = 30;
 
 void setup() {
   Serial.begin(9600);
   while(!Serial){}
   initMovement();
-  initBuzzer();
+  //initBuzzer();
   initAnim();
   // initSensors();
 }
@@ -16,8 +18,9 @@ void loop() {
   handleSerial();
   obstacleAvoidance();
   if(!AnimEndReached()){
-    long animation_step_ms = 30;
-    AnimStep(animation_step_ms);
-    delay(animation_step_ms);
+    if ( millis() >= latestAnimStep + animation_step_ms ){
+      AnimStep(animation_step_ms);
+      latestAnimStep = millis();
+    }
   }
 }
