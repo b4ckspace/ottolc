@@ -148,8 +148,20 @@ void doCommand(String line){
   }else if(command=="resetservos"){
     resetServos();
     Serial.println(F("servos reseted"));
+  }else if(command=="mel0"){
+    playMelody(0);
+  }else if(command=="mel1"){
+    playMelody(1);
+  }else if(command=="silence"){
+    setTone(0, 10000);
   }else if(command=="beep"){
     beep();
+  }else if(command=="beep2"){
+    setTone(2000, 1000000);
+  }else if(command=="beep3"){
+    setTone(250, 1000000);
+  }else if(command=="beep-evil"){
+    digitalWrite(PIN_BUZZER,HIGH);
   }else if(command=="play"){
     startAnimation();
   }else if(command=="settrim"||command=="st"){
