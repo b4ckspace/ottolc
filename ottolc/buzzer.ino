@@ -132,11 +132,11 @@ bool toneState = false;
 
 void softTone(){
 int melodies[2][MAX_MELODY_LENGTH] = {
-  {NOTE_C4,  NOTE_R,  NOTE_C4,  NOTE_R,  NOTE_C4,  NOTE_R,  NOTE_C8,  t_C,  t_c,  t_g,  t_a,  t_C,  t_R,  t_R,  t_R,  t_R },
+  {NOTE_C4,  NOTE_R,  NOTE_C4,  NOTE_R,  NOTE_C4,  NOTE_R,  NOTE_C8,  NOTE_R,  NOTE_C5,  NOTE_R,  NOTE_C5,  NOTE_R,  NOTE_C5,  NOTE_R,  NOTE_R,  NOTE_R },
   {NOTE_A7,  NOTE_G7,  NOTE_E7,  NOTE_C7,  NOTE_D7,   NOTE_B7,  NOTE_F7,  NOTE_C8,  NOTE_A7,  NOTE_G7, NOTE_E7, NOTE_C7, NOTE_D7, NOTE_B7, NOTE_F7, NOTE_C8 }
 };
 int beats[2][MAX_MELODY_LENGTH]  = {
-  {20, 10, 20,  10,  20,  10, 80, 16, 16, 16, 8, 8, 0, 0, 0, 0 },
+  {20, 10, 20,  10,  20,  10, 80, 10, 20, 10, 20, 10, 20, 0, 0, 0 },
   {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }
 };
 
@@ -204,6 +204,7 @@ void setTone(int myTone, unsigned long duration){
   Serial.print("tone ");
   Serial.println(myTone);
 }
+
 
 void playMelody(int m){
   melody = m;
