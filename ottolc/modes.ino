@@ -30,15 +30,18 @@ void modeinit(){
 	resetServos();
 	switch(_currentmode){
 		case 0:
+			// playMelodyPart(0,8,9);
 			enableCollision();
 			addAnimationCallback(keep_walking);
 			startAnimation();
 		break;
 		case 1:
+			// playMelodyPart(0,8,11);
 			enableCollision();
 			addAnimationCallback(keep_walking_back);
 			startAnimation();
 		case 2:
+			// playMelodyPart(0,8,13);
 			disableCollision();
 			addAnimationCallback(randomAction);
 			startAnimation();
@@ -50,6 +53,7 @@ void modeinit(){
 void mode_onCollision(){
 	// Serial.println("coll");
 	if(_currentmode==0){
+		// setTone(262, 1000000);
 		disableCollision();
 		prependAnimationCallback(walk_back_collision);
 	}

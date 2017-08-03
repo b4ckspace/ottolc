@@ -10,7 +10,7 @@ void setup() {
   while(!Serial){}
   randomSeed(analogRead(7));
   initMovement();
-  initBuzzer();
+  // initBuzzer();
   initAnim();
   initSensors();
   initModes();
@@ -26,5 +26,5 @@ void loop() {
       latestAnimStep = millis();
     }
   }
-  softTone();
+  // softTone();
 }
