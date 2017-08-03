@@ -8,6 +8,7 @@ long animation_step_ms = 30;
 void setup() {
   Serial.begin(9600);
   while(!Serial){}
+  randomSeed(analogRead(7));
   initMovement();
   initBuzzer();
   initAnim();

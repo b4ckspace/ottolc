@@ -39,6 +39,45 @@ prependAnimationFrame(55, 90, 90, 90, 116);
 prependAnimationFrame(89, 90, 90, 90, 4);
 }
 
+void kneel_down(void*){
+prependAnimationFrame(90, 90, 90, 90, 626);
+prependAnimationFrame(0, 180, 90, 90, 200);
+prependAnimationFrame(0, 180, 27, 153, 1000);
+prependAnimationFrame(0, 180, 27, 153, 1000);
+prependAnimationFrame(0, 180, 27, 153, 400);
+prependAnimationFrame(50, 130, 90, 90, 150);
+}
+void moonwalk_r(void*){
+prependAnimationFrame(90, 90, 90, 90, 400);
+prependAnimationFrame(145, 104, 90, 90, 400);
+prependAnimationFrame(117, 64, 90, 90, 400);
+prependAnimationFrame(70, 35, 90, 90, 400);
+prependAnimationFrame(90, 90, 90, 90, 400);
+prependAnimationFrame(145, 104, 90, 90, 400);
+prependAnimationFrame(117, 64, 90, 90, 400);
+prependAnimationFrame(70, 35, 90, 90, 400);
+}
+void huffing(void*){
+prependAnimationFrame(90, 90, 90, 90, 150);
+prependAnimationFrame(117, 99, 90, 90, 300);
+prependAnimationFrame(81, 63, 90, 90, 300);
+prependAnimationFrame(117, 99, 90, 90, 300);
+prependAnimationFrame(81, 63, 90, 90, 300);
+prependAnimationFrame(117, 99, 90, 90, 300);
+prependAnimationFrame(81, 63, 90, 90, 150);
+}
+void randomAction(void*){
+    long num = random(0, 5);
+    prependAnimationCallback(randomAction);
+    switch(num){
+        case 0:prependAnimationCallback(basic_step);break;
+        case 1:prependAnimationCallback(basic_back);break;
+        case 2:prependAnimationCallback(kneel_down);break;
+        case 3:prependAnimationCallback(moonwalk_r);break;
+        case 4:prependAnimationCallback(huffing);break;
+    }
+}
+
 void keep_walking_back(void*){
     prependAnimationCallback(keep_walking_back);
     prependAnimationCallback(basic_back);
