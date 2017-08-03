@@ -141,26 +141,38 @@ void doCommand(String line){
   }
 
   //TODO: replace with something better, hash map?
-  if(command=="ping"){
+  if(command==F("ping")){
     Serial.println("pong!");
-  }else if(command=="setservo"){
+  }else if(command==F("setservo")){
     replSetServo(args);
-  }else if(command=="resetservos"){
+  }else if(command==F("resetservos")){
     resetServos();
-    Serial.println(F("servos reseted"));
-  }else if(command=="beep"){
+    //Serial.println(F("servos reseted"));
+  }else if(command==F("mel0")){
+    playMelody(0);
+  }else if(command==F("mel1")){
+    playMelody(1);
+  }else if(command==F("mel2")){
+    playMelodyPart(1,0,3);
+  }else if(command==F("silence")){
+    setTone(0, 10000);
+  }else if(command==F("beep")){
     beep();
-  }else if(command=="play"){
+  }else if(command==F("beep2")){
+    setTone(2000, 1000000);
+  }else if(command==F("beep3")){
+    setTone(250, 1000000);
+  }else if(command==F("play")){
     startAnimation();
-  }else if(command=="settrim"||command=="st"){
+  }else if(command==F("st")){  // settrim
     replSetTrim(args);
     replTrimtest();
-  }else if(command=="printservos"||command=="ps"){
+  }else if(command==F("ps")){  // settrim
     replPrintServos();
   }else if(command=="e"){
     Serial.println(F("echo? "));
     sensorfoo();
-  }else if(command=="reset"){
+  }else if(command==F("reset")){
     void(* resetFunc) (void) = 0;
     resetFunc();
   }else if(command=="!"){
@@ -175,7 +187,7 @@ void doCommand(String line){
 
 // this seperate function should be used for commands that are used by tools and should not change their interface
 // commands sould return a non 0 value on error and a message 
-#define PBUFSZ 200
+#define PBUFSZ 50
 char printbuf[PBUFSZ];
 
 void apiCommand(String line){
@@ -209,17 +221,17 @@ void apiCommand(String line){
     if( (pos+1)<(line.length()) ){
       args = line.substring(pos+1, line.length());
     }
-    if(command=="ping"){
+    if(command==F("ping")){
       result="pong";
-    }else if(command=="maxframes"){
+    }else if(command==F("maxframes")){
       result=ARBSIZE;
-    }else if(command=="apiversion"){
+    }else if(command==F("apiversion")){
       result = apiVersion;
-    }else if(command=="fwversion"){
+    }else if(command==F("fwversion")){
       result = fwVersion;
-    }else if(command=="getinfo"){
+    }else if(command==F("getinfo")){
       memset(printbuf,0,PBUFSZ);
-      snprintf(printbuf, PBUFSZ, "%d %d", fwVersion, apiVersion);
+      snprintf(printbuf, PBUFSZ, "%d %d %s", fwVersion, apiVersion, __DATE__);
       //snprintf(printbuf, PBUFSZ, "Versions 1 2");
       result=printbuf;
     }else if(command=="gettrims"){
