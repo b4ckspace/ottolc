@@ -157,7 +157,9 @@ void doCommand(String line){
   }else if(command==F("silence")){
     setTone(0, 10000);
   }else if(command==F("beep")){
-    beep();
+    playMelodyPart(0,0,5);
+  }else if(command==F("beep1")){
+    playMelodyPart(0,0,7);
   }else if(command==F("beep2")){
     setTone(2000, 1000000);
   }else if(command==F("beep3")){
