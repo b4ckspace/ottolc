@@ -16,3 +16,30 @@ void keep_walking(void*){
     prependAnimationCallback(keep_walking);
     prependAnimationCallback(basic_step);
 }
+
+
+void basic_back(void*){
+prependAnimationFrame(90, 90, 90, 90, 500);
+prependAnimationFrame(90, 90, 90, 90, 140);
+prependAnimationFrame(65, 91, 91, 91, 304);
+prependAnimationFrame(60, 30, 120, 120, 200);
+prependAnimationFrame(90, 90, 120, 120, 200);
+prependAnimationFrame(90, 90, 120, 120, 100);
+prependAnimationFrame(90, 120, 120, 120, 100);
+prependAnimationFrame(90, 120, 120, 120, 300);
+prependAnimationFrame(123, 120, 119, 75, 90);
+prependAnimationFrame(138, 120, 119, 75, 98);
+prependAnimationFrame(147, 120, 118, 75, 54);
+prependAnimationFrame(149, 120, 109, 75, 104);
+prependAnimationFrame(145, 115, 77, 75, 160);
+prependAnimationFrame(90, 91, 62, 62, 168);
+prependAnimationFrame(61, 25, 60, 60, 500);
+prependAnimationFrame(60, 25, 90, 90, 70);
+prependAnimationFrame(55, 90, 90, 90, 116);
+prependAnimationFrame(89, 90, 90, 90, 4);
+}
+
+void keep_walking_back(void*){
+    prependAnimationCallback(keep_walking_back);
+    prependAnimationCallback(basic_back);
+}

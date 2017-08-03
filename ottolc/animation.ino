@@ -31,6 +31,15 @@ inline bool can_prepend(){
 inline bool is_empty(){
     return rhead==whead;
 }
+inline  bool has_next(){
+    if(is_empty())
+        return false;
+    if(rhead==(whead-1))
+        return false;
+    if( (whead==&frames[0]) && (rhead==&frames[ARBSIZE-1]) )
+        return false;
+    return true;
+}
 
 bool animend;
 
@@ -72,10 +81,11 @@ void AnimStep(int16_t ms){
 
     animPos += ms;
 
-    if(animPos>rhead->data.keyframe.duration){
-        if( is_empty()){
+    if(animPos > rhead->data.keyframe.duration){
+        if(!has_next()){
             Serial.println(F("Animation ringbuffer empty, staying in last pos"));
-            animend = true;
+            rhead=whead;
+            animend=true;
             return;
         }
         memcpy(&startpos, &rhead->data.keyframe, sizeof(AnimKeyframe));
