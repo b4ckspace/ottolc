@@ -41,8 +41,6 @@ void echoCb(){
 	lastping = millis();
 	if(sonar.check_timer()){
 		auto dist = sonar.ping_result / US_ROUNDTRIP_CM;
-		Serial.print(dist);
-		Serial.println("");
 		if(_collison_enabled){
 			if(dist <= _collisiondist){
 				_safetycounter++;
