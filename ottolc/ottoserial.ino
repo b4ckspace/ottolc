@@ -15,6 +15,12 @@ bool isDebug(){
 int apiVersion = 2;
 int fwVersion = 1;
 
+void playTone(String args){
+  int myTone;
+  int duration;
+  int matches = sscanf(args.c_str(), "%d %d", &myTone, &duration);
+  setTone(myTone, duration * (unsigned long)100000);
+}
 
 void setServo(EServo servo, int value);
 void replSetServo(String args){
@@ -154,12 +160,10 @@ void doCommand(String line){
     playMelody(1);
   }else if(command==F("mel2")){
     playMelodyPart(1,0,3);
-  }else if(command==F("silence")){
-    setTone(0, 10000);
-  }else if(command==F("beep")){
-    beep();
+  }else if(command==F("beep1")){
+    playMelodyPart(0,0,7);
   }else if(command==F("beep2")){
-    setTone(2000, 1000000);
+    playMelodyPart(0,8,13);
   }else if(command==F("beep3")){
     setTone(250, 1000000);
   }else if(command==F("play")){
@@ -311,6 +315,16 @@ void apiCommand(String line){
     }else if(command=="servoson"){
       enableServos();
       result = "servos switched on";
+    }else if(command==F("beep")){
+      setTone(262, 1000000); //C4
+    }else if(command==F("tone")){
+      playTone(args);
+    }else if(command==F("beep_m1")){
+      playMelodyPart(0,8,9);
+    }else if(command==F("beep_m2")){
+      playMelodyPart(0,8,11);
+    }else if(command==F("beep_m3")){
+      playMelodyPart(0,8,13);
     }else{
       returncode = -1;
       result = "command not found";
