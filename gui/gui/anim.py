@@ -76,14 +76,26 @@ class Animtab():
         tkinter.Button(
             master,
             text="save",
-            command=self.save).grid(
+            command=self.savefile).grid(
             row=2,
             column=4)
         tkinter.Button(
             master,
             text="load",
-            command=self.load).grid(
+            command=self.loadfile).grid(
             row=3,
+            column=4)
+        tkinter.Button(
+            master,
+            text="save to clipboard",
+            command=self.saveclipboard).grid(
+            row=4,
+            column=4)
+        tkinter.Button(
+            master,
+            text="load from clipboard",
+            command=self.loadclipboard).grid(
+            row=5,
             column=4)
 
         
@@ -143,14 +155,14 @@ class Animtab():
         self.app.mov(None)
 
 
-    def save(self):
+    def savefile(self):
         savepath = asksaveasfilename(defaultextension=".json")
         if not savepath:
             return
         with open(savepath, "w") as f:
-            json.dump(self.framelist.get(0, tkinter.END),f)
+            json.dump(self.framelist.get(0, tkinter.END), f, indent=4)
         
-    def load(self):
+    def loadfile(self):
         loadpath = askopenfilename(filetypes=[("Json file","*.json")])
         if not loadpath:
             return
@@ -159,6 +171,15 @@ class Animtab():
             self.framelist.delete(0, tkinter.END)
             for e in obj:
                 self.framelist.insert(tkinter.END, e)
+
+    def saveclipboard(self):
+         self.app.master.clipboard_append( json.dumps(self.framelist.get(0, tkinter.END), indent=4) )
+
+    def loadclipboard(self):
+        obj = json.loads(self.app.master.clipboard_get())
+        self.framelist.delete(0, tkinter.END)
+        for e in obj:
+            self.framelist.insert(tkinter.END, e)
 
     def resetServos(self):
         self.nosend = True

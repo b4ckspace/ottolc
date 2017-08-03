@@ -13,6 +13,7 @@ import re
 
 class App():
     def __init__(self, master, serialDevice=None):
+        self.master = master
         master.wm_title("OttO-LC")
         tabs = ttk.Notebook(master)
 
@@ -107,6 +108,7 @@ class App():
                 if len(line)<1:
                     continue
                 if line[0]!=ord('.'):
+                    print(line)
                     continue
                 if line[:2] == b'.0':
                     line = line[2:]
