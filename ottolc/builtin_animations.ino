@@ -43,3 +43,9 @@ void keep_walking_back(void*){
     prependAnimationCallback(keep_walking_back);
     prependAnimationCallback(basic_back);
 }
+
+
+void walk_back_collision(){
+    prependAnimationCallback(mode_onWalkbackEnd);
+    prependAnimationCallback(basic_back);
+}

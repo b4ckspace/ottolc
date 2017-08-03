@@ -11,12 +11,14 @@ void setup() {
   initMovement();
   initBuzzer();
   initAnim();
-  // initSensors();
+  initSensors();
+  initModes();
 }
 
 void loop() {
   handleSerial();
   obstacleAvoidance();
+  modecheck();
   if(!AnimEndReached()){
     if ( millis() >= latestAnimStep + animation_step_ms ){
       AnimStep(animation_step_ms);
