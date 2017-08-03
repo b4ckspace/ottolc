@@ -136,6 +136,13 @@ bool addAnimationCallback(AnimationCallback::AnimFun callback){
 //TODO: add params
 bool prependAnimationCallback(AnimationCallback::AnimFun callback);
 bool prependAnimationCallback(AnimationCallback::AnimFun callback){
+    if(!in_anim_callback){
+        //ensure we have a new startpos which was the last set position so transition is smooth
+        startpos.rightFoot = getServo(rightFoot);
+        startpos.leftFoot = getServo(leftFoot);
+        startpos.rightLeg = getServo(rightLeg);
+        startpos.leftLeg = getServo(leftLeg);
+    }
     if(!can_prepend()){
         Serial.println(F("Animation ringbuffer full, dropping prependAnimationCallback"));
         beep();
