@@ -37,7 +37,7 @@
 
 
 
-
+#define MAX_MELODY_LENGTH 16
 
 
 void initBuzzer(){
@@ -46,8 +46,10 @@ void initBuzzer(){
 
 // Some Variables
 int melody = -1;
+int melBoundary[] = {-1,-1};
 int note = 0;  //number of the note in melody
 int tone_ = 0;
+int melodyEnd = MAX_MELODY_LENGTH;
 unsigned long toneChange = 0;
 unsigned long toneBegin = 0;
 unsigned long toneDuration = 1000 * 0;
@@ -56,21 +58,21 @@ bool toneState = false;
 
 void softTone(){
 /*
-  int melodies[2][16] = {
+  int melodies[2][MAX_MELODY_LENGTH] = {
     {t_C,  t_b,  t_g,  t_C,  t_b,  t_e,  t_R,  t_C,  t_c,  t_g,  t_a,  t_C,  t_R,  t_R,  t_R,  t_R },
     {NOTE_A7,  NOTE_G7,  NOTE_E7,  NOTE_C7,  NOTE_D7,   NOTE_B7,  NOTE_F7,  NOTE_C8,  NOTE_A7,  NOTE_G7, NOTE_E7, NOTE_C7, NOTE_D7, NOTE_B7, NOTE_F7, NOTE_C8 }
   };
-  int beats[2][16]  = {
+  int beats[2][MAX_MELODY_LENGTH]  = {
     {16, 16, 16,  8,  8,  16, 32, 16, 16, 16, 8, 8, 0, 0, 0, 0 },
     {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }
   };
 */
 
-int melodies[2][16] = {
+int melodies[2][MAX_MELODY_LENGTH] = {
   {t_C,  t_b,  t_g,  t_C,  t_b,  t_e,  t_R,  t_C,  t_c,  t_g,  t_a,  t_C,  t_R,  t_R,  t_R,  t_R },
   {NOTE_A7,  NOTE_G7,  NOTE_E7,  NOTE_C7,  NOTE_D7,   NOTE_B7,  NOTE_F7,  NOTE_C8,  NOTE_A7,  NOTE_G7, NOTE_E7, NOTE_C7, NOTE_D7, NOTE_B7, NOTE_F7, NOTE_C8 }
 };
-int beats[2][16]  = {
+int beats[2][MAX_MELODY_LENGTH]  = {
   {30, 30, 30,  30,  30,  30, 30, 16, 16, 16, 8, 8, 0, 0, 0, 0 },
   {10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10 }
 };
@@ -81,11 +83,21 @@ int beats[2][16]  = {
 
   // play melody
   if ( melody >=0 && tone_ == 0 ){
+    // check which part of the melody should be played
+    //melodyEnd = MAX_MELODY_LENGTH;
+    if ( note == 0 && melBoundary[0] >= 0){
+      note = melBoundary[0];
+      melodyEnd = melBoundary[1];
+    }
+    // play it loud! ;)
     setTone(melodies[melody][note], beats[melody][note] * (unsigned long)10000);
     note++;
-    if(note >= 12){
+    if(note >= melodyEnd){
       note = 0;
       melody = -1;
+      melBoundary[0] = -1;
+      melBoundary[1] = -1;
+      melodyEnd = MAX_MELODY_LENGTH;
     }
   }
 
@@ -121,6 +133,8 @@ void playMelody(int m){
 
 void playMelodyPart(int m, int s, int e){
   melody = m;
+  melBoundary[0] = s;
+  melBoundary[1] = e;
 }
 
 
