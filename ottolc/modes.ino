@@ -39,11 +39,16 @@ void modeinit(){
 			addAnimationCallback(keep_walking_back);
 			startAnimation();
 		case 2:
-			disableCollision();break;
+			enableCollision();break;
 	}
 	//insert switch case for modes here
 }
 void mode_onCollision(){
+	// Serial.println("coll");
+	if(_currentmode==0){
+		disableCollision();
+		prependAnimationCallback(walk_back_collision);
+	}
 	//insert switch case here for collision handling
 }
 

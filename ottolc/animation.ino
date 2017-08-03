@@ -136,12 +136,6 @@ bool addAnimationCallback(AnimationCallback::AnimFun callback){
 //TODO: add params
 bool prependAnimationCallback(AnimationCallback::AnimFun callback);
 bool prependAnimationCallback(AnimationCallback::AnimFun callback){
-    if(!in_anim_callback){
-        Serial.println(F("prepend called but not in animation callback"));
-        beep();
-        return 1;
-    }
-
     if(!can_prepend()){
         Serial.println(F("Animation ringbuffer full, dropping prependAnimationCallback"));
         beep();

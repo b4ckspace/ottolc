@@ -1,7 +1,7 @@
 // this file manages the sensors
 #include <NewPing.h>
 bool _canping = true;
-const int _collisiondist = 20;
+const int _collisiondist = 10;
 const int _safetylimit = 3;
 int _safetycounter = 0;
 bool _collison_enabled;
@@ -30,7 +30,7 @@ void obstacleAvoidance(){
 		if((now-lastping)>50)
 			sensorfoo();
 	}else{
-		if((now-lastping)>200){
+		if((now-lastping)>100){
 			lastping = millis();
 			sensorfoo();
 		}
