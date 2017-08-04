@@ -15,6 +15,17 @@ class App():
     def __init__(self, master, serialDevice=None):
         self.master = master
         master.wm_title("OttO-LC V 1.0.0")
+
+
+        if not serialDevice:
+            serialDevice = self._findSerialPort()
+        if serialDevice:
+            self.ser = serial.Serial(serialDevice)
+            self.use_serial = True
+            self._initserial()
+        else:
+            self.use_serial = False
+
         tabs = ttk.Notebook(master)
 
         self.nosend = True
@@ -35,14 +46,6 @@ class App():
         self.nosend = False
         self.mov(None)
 
-        if not serialDevice:
-            serialDevice = self._findSerialPort()
-        if serialDevice:
-            self.ser = serial.Serial(serialDevice)
-            self.use_serial = True
-            self._initserial()
-        else:
-            self.use_serial = False
 
     def _findSerialPort(self):
         ports = serial.tools.list_ports.comports()
