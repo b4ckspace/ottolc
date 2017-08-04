@@ -1,8 +1,8 @@
 // this file manages the sensors
 #include <NewPing.h>
 bool _canping = true;
-const int _collisiondist = 10;
-const int _safetylimit = 3;
+const int _collisiondist = 8;
+const int _safetylimit = 6;
 int _safetycounter = 0;
 bool _collison_enabled;
 
@@ -49,7 +49,8 @@ void echoCb(){
 					_safetycounter=0;
 				}
 			}else{
-				_safetycounter=0;
+				if(_safetycounter>0)
+					_safetycounter--;
 			}
 		}
 		_canping=true;

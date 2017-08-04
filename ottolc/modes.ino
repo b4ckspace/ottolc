@@ -5,7 +5,7 @@
 bool addAnimationCallback(AnimationCallback::AnimFun callback);
 
 Bounce button;
-int _currentmode = 2;
+int _currentmode = 3;
 int _nummodes = 4;
 void initModes(){
 	pinMode(6,INPUT_PULLUP);
@@ -37,27 +37,24 @@ void modeinit(){
 		break;
 		case 1:
 			// playMelodyPart(0,8,11);
-			enableCollision();
+			disableCollision();
 			addAnimationCallback(keep_walking_back);
 			startAnimation();
+			break;
 		case 2:
 			// playMelodyPart(0,8,13);
-			disableCollision();
+			enableCollision();
 			addAnimationCallback(randomAction);
 			startAnimation();
+			break;
 		case 3:
-			enableCollision();break;
+			disableCollision();break;
 	}
 	//insert switch case for modes here
 }
 void mode_onCollision(){
-	// Serial.println("coll");
-	if(_currentmode==0){
-		// setTone(262, 1000000);
-		disableCollision();
-		prependAnimationCallback(walk_back_collision);
-	}
-	//insert switch case here for collision handling
+	disableCollision();
+	prependAnimationCallback(walk_back_collision);
 }
 
 void mode_onWalkbackEnd(void*){

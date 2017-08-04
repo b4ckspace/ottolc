@@ -184,7 +184,7 @@ void doCommand(String line){
   }else{
     Serial.print(F("command not found: "));
     Serial.println(command);
-    beep();
+    // beep();
   }
   Serial.print(F("enter command: ")); 
 }
