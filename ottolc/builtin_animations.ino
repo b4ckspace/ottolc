@@ -74,6 +74,14 @@ prependAnimationFrame(65, 90, 130, 90, 425);
 prependAnimationFrame(65, 30, 90, 90, 102);
 prependAnimationFrame(60, 90, 90, 90, 102);
 }
+void turnright(void*){
+prependAnimationFrame(90, 90, 90, 90, 114);
+prependAnimationFrame(90, 104, 90, 50, 200);
+prependAnimationFrame(90, 104, 90, 50, 200);
+prependAnimationFrame(90, 115, 90, 50, 425);
+prependAnimationFrame(150, 115, 90, 90, 102);
+prependAnimationFrame(90, 120, 90, 90, 102);
+}
 void randomAction(void*){
     long num = random(0, 5);
     prependAnimationCallback(randomAction);
@@ -94,8 +102,11 @@ void keep_walking_back(void*){
 
 void walk_back_collision(){
     prependAnimationCallback(mode_onWalkbackEnd);
-    prependAnimationCallback(turnleft);
-    prependAnimationCallback(turnleft);
+    if(random(0, 2)){
+        prependAnimationCallback(turnleft);
+    }else{
+        prependAnimationCallback(turnright);
+    }
     prependAnimationCallback(basic_back);
     prependAnimationCallback(basic_back);
     prependAnimationFrame(90, 90, 90, 90, 400);
