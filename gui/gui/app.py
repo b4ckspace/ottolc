@@ -14,7 +14,7 @@ import re
 class App():
     def __init__(self, master, serialDevice=None):
         self.master = master
-        master.wm_title("OttO-LC")
+        master.wm_title("OttO-LC V 1.0.0")
         tabs = ttk.Notebook(master)
 
         self.nosend = True
