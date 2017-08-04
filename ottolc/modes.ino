@@ -30,19 +30,19 @@ void modeinit(){
 	resetServos();
 	switch(_currentmode){
 		case 0:
-			// playMelodyPart(0,8,9);
+			playMelodyPart(0,8,9);
 			enableCollision();
 			addAnimationCallback(keep_walking);
 			startAnimation();
 		break;
 		case 1:
-			// playMelodyPart(0,8,11);
+			playMelodyPart(0,8,11);
 			disableCollision();
 			addAnimationCallback(keep_walking_back);
 			startAnimation();
 			break;
 		case 2:
-			// playMelodyPart(0,8,13);
+			playMelodyPart(0,8,13);
 			enableCollision();
 			addAnimationCallback(randomAction);
 			startAnimation();
@@ -54,6 +54,7 @@ void modeinit(){
 }
 void mode_onCollision(){
 	disableCollision();
+	playMelodyPart(0,0,7);
 	prependAnimationCallback(walk_back_collision);
 }
 

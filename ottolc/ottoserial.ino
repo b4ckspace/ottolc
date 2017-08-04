@@ -191,7 +191,7 @@ void doCommand(String line){
 
 // this seperate function should be used for commands that are used by tools and should not change their interface
 // commands sould return a non 0 value on error and a message 
-#define PBUFSZ 50
+#define PBUFSZ 200
 char printbuf[PBUFSZ];
 
 void apiCommand(String line){
@@ -238,12 +238,12 @@ void apiCommand(String line){
       snprintf(printbuf, PBUFSZ, "%d %d %s", fwVersion, apiVersion, __DATE__);
       //snprintf(printbuf, PBUFSZ, "Versions 1 2");
       result=printbuf;
-    }else if(command=="gettrims"){
+    }else if(command==F("gettrims")){
       char getTrimdata(EServo servo);
       memset(printbuf,0,PBUFSZ);
       snprintf(printbuf, PBUFSZ, "%d %d %d %d", getTrimdata(rightFoot), getTrimdata(leftFoot), getTrimdata(rightLeg), getTrimdata(leftLeg));
       result=printbuf;
-    }else if(command=="settrims"){
+    }else if(command==F("settrims")){
       int a,b,c,d;
       Serial.println(args);
       if(sscanf(args.c_str(), "%d %d %d %d", &a, &b, &c, &d)!=4){
@@ -256,14 +256,14 @@ void apiCommand(String line){
         setTrimdata(leftLeg, d);
         result="trim data set";
       }
-    }else if(command=="trimtest"){
+    }else if(command==F("trimtest")){
       replTrimtest();
     }else if(command=="getservos"){
       int getServo(EServo servo);
       memset(printbuf,0,PBUFSZ);
       snprintf(printbuf, PBUFSZ, "%d %d %d %d", relPos(getServo(rightFoot)), relPos(getServo(leftFoot)), relPos(getServo(rightLeg)), relPos(getServo(leftLeg)));
       result=printbuf;
-    }else if(command=="setservos"){
+    }else if(command==F("setservos")){
       int leftFootv,rightFootv,leftLegv,rightLegv;
       Serial.println(args);
       if(sscanf(args.c_str(), "%d %d %d %d", &rightFootv, &leftFootv, &rightLegv, &leftLegv)!=4){
@@ -276,7 +276,7 @@ void apiCommand(String line){
         setServo(leftLeg, absPos(leftLegv));
         result="Servos set";
       }
-    }else if(command=="pushframe"){
+    }else if(command==F("pushframe")){
       int leftFootv,rightFootv,leftLegv,rightLegv,duration;
       Serial.println(args);
       if(sscanf(args.c_str(), "%d %d %d %d %d", &rightFootv, &leftFootv, &rightLegv, &leftLegv, &duration)!=5){
@@ -286,33 +286,51 @@ void apiCommand(String line){
         addAnimationFrame(absPos(leftFootv),absPos(rightFootv),absPos(leftLegv),absPos(rightLegv),duration);
         result="frame added";
       }
-    }else if(command=="resetanim"){
+    }else if(command==F("resetanim")){
       result = "animation cleared";
       resetAnimation();
-    }else if(command=="playanim"){
+    }else if(command==F("playanim")){
       startAnimation();
     // the gui can use this to query the build in functions that can be used as animation callback
-    }else if(command=="supportedanims"){
-      result = "basic_step";
+    }else if(command==F("supportedanims")){
+      result = String(F("basic_step basic_back kneel_down moonwalk_r huffing turnleft turnright"));
 
     // push a callback instead of a keyframe
-    }else if(command=="pushcallback"){
+    }else if(command==F("pushcallback")){
       bool addAnimationCallback(AnimationCallback::AnimFun callback);
 
       bool found = false;
-      if(args=="basic_step"){
+      if(args==F("basic_step")){
         found=true;
         addAnimationCallback(basic_step);
+      }else if(args==F("basic_back")){
+        found=true;
+        addAnimationCallback(basic_back);
+      }else if(args==F("kneel_down")){
+        found=true;
+        addAnimationCallback(kneel_down);
+      }else if(args==F("moonwalk_r")){
+        found=true;
+        addAnimationCallback(moonwalk_r);
+      }else if(args==F("huffing")){
+        found=true;
+        addAnimationCallback(huffing);
+      }else if(args==F("turnleft")){
+        found=true;
+        addAnimationCallback(turnleft);
+      }else if(args==F("turnright")){
+        found=true;
+        addAnimationCallback(turnright);
       }
       if(!found){
         result = "no callback with that name found";
         returncode = 23;
       }
 
-    }else if(command=="servosoff"){
+    }else if(command==F("servosoff")){
       disableServos();
       result = "servos switched off";
-    }else if(command=="servoson"){
+    }else if(command==F("servoson")){
       enableServos();
       result = "servos switched on";
     }else if(command==F("beep")){
