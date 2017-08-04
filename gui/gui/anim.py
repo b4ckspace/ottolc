@@ -98,14 +98,25 @@ class Animtab():
             row=5,
             column=4)
 
+        funlist = list(map(lambda x: x.decode('utf-8'), self.app._sendcmd("! supportedanims\n").split(b' ')))
+        if len(funlist)>0:
+            var = tkinter.StringVar(master)
+            var.set(funlist[0])
+            self.selected_fun = var
+            w = tkinter.OptionMenu(master, var, *funlist)
+            w.grid(row=3, column=2)
+            tkinter.Button(
+                master,
+                text="add animation as step",
+                command=self.addfun).grid(
+                row=4,
+                column=2)
+
         
         self.framelist = tkinter.Listbox(master, selectmode=tkinter.EXTENDED)
         self.framelist.grid(row=0, column=4, rowspan=2)
         self.framelist.bind('<Double-Button-1>', self.loadset)
-    
 
-        #self.nosend = False
-        #self.app.mov(None)
 
     def getrf(self):
         return self.rf.get()
@@ -116,6 +127,8 @@ class Animtab():
     def getll(self):
         return self.ll.get()
 
+    def addfun(self):
+        self.framelist.insert(tkinter.END, self.selected_fun.get())
 
     def addframe(self):
         cmd = "%d %d %d %d %d" % (
@@ -133,7 +146,10 @@ class Animtab():
     def _sendandplayanim(self, animlist):
         self.app._sendcmd("! resetanim\n" )
         for i in animlist:
-            self.app._sendcmd("! pushframe %s\n" % (i,))
+            if i[0].isdigit() or i[0]=='-':
+                self.app._sendcmd("! pushframe %s\n" % (i,))
+            else:
+                self.app._sendcmd("! pushcallback %s\n" % (i,))
         self.app._sendcmd("! playanim\n")
 
     def deleteselection(self):
