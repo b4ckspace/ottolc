@@ -1,20 +1,32 @@
 void basic_step(void*){
-    prependAnimationFrame(90, 90, 90, 90, 100);
-    prependAnimationFrame(90, 90, 115, 90, 250);
-    prependAnimationFrame(64, 55, 110, 80, 150);
-    prependAnimationFrame(64, 41, 110, 65, 500);
-    prependAnimationFrame(59, 30, 65, 65, 50);
-    prependAnimationFrame(59, 30, 65, 65, 160);
-    prependAnimationFrame(90, 90, 65, 65, 350);
-    prependAnimationFrame(125, 117, 80, 65, 150);
-    prependAnimationFrame(139, 117, 115, 65, 250);
-    prependAnimationFrame(155, 125, 90, 90, 50);
-    prependAnimationFrame(155, 125, 90, 90, 160);
+prependAnimationFrame(90, 90, 90, 90, 200);
+prependAnimationFrame(90, 90, 90, 90, 140);
+prependAnimationFrame(65, 91, 89, 89, 304);
+prependAnimationFrame(60, 30, 60, 60, 200);
+prependAnimationFrame(90, 90, 60, 60, 200);
+prependAnimationFrame(90, 90, 60, 60, 100);
+prependAnimationFrame(90, 120, 60, 60, 100);
+prependAnimationFrame(90, 120, 60, 60, 300);
+prependAnimationFrame(123, 120, 61, 105, 90);
+prependAnimationFrame(138, 120, 61, 105, 98);
+prependAnimationFrame(147, 120, 62, 105, 54);
+prependAnimationFrame(149, 120, 71, 105, 104);
+prependAnimationFrame(145, 115, 103, 105, 160);
+prependAnimationFrame(90, 91, 118, 118, 168);
+prependAnimationFrame(61, 25, 120, 120, 500);
+prependAnimationFrame(60, 25, 90, 90, 70);
+prependAnimationFrame(55, 90, 90, 90, 116);
+prependAnimationFrame(89, 90, 90, 90, 4);
 }
 
 void keep_walking(void*){
     prependAnimationCallback(keep_walking);
-    prependAnimationCallback(basic_step);
+    long num = random(0, 8);
+    switch(num){
+        case 0: prependAnimationCallback(turnleft);break;
+        case 1: prependAnimationCallback(turnright);break;
+        default:prependAnimationCallback(basic_step);break;
+    }
 }
 
 
@@ -83,14 +95,16 @@ prependAnimationFrame(150, 115, 90, 90, 102);
 prependAnimationFrame(90, 120, 90, 90, 102);
 }
 void randomAction(void*){
-    long num = random(0, 5);
+    long num = random(0, 10);
     prependAnimationCallback(randomAction);
     switch(num){
-        case 0:prependAnimationCallback(basic_step);break;
+        case 0:case 7:case 8:case 9:prependAnimationCallback(basic_step);break;
         case 1:prependAnimationCallback(basic_back);break;
         case 2:prependAnimationCallback(kneel_down);break;
         case 3:prependAnimationCallback(moonwalk_r);break;
-        case 4:prependAnimationCallback(huffing);break;
+        case 4:prependAnimationCallback(turnleft);break;
+        case 5:prependAnimationCallback(turnright);break;
+        case 6:prependAnimationCallback(huffing);break;
     }
 }
 

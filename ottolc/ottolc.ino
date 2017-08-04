@@ -9,6 +9,7 @@ void setup() {
   Serial.begin(9600);
   while(!Serial){}
   randomSeed(analogRead(7));
+  initSerial();
   initMovement();
   initBuzzer();
   initAnim();

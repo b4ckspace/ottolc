@@ -62,10 +62,13 @@ class App():
         self.ser.timeout=0.1
         try:
             while True:
-                line = self.ser.readline()
+                line = self.ser.readline().strip()
                 if len(line)==0:
-                    break
+                    print(".",end="")
+                    continue
                 print(line)
+                if line==b".0 boot_ok":
+                    break
         except Exception as e:
             raise
 

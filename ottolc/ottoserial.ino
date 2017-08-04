@@ -1,15 +1,10 @@
 // this file manages serial communications and command dispatch for debug&adjustment purposes
 #include <stdio.h>
-bool isDebug(){
-  return true;
-  delay(2000);  
-  if(Serial.available()){
-    digitalWrite(13, HIGH);
-    Serial.println(F("I am otto, version 0.0.1"));
-    Serial.readStringUntil('\n'); // Clear serial buffer
-    Serial.setTimeout(20);
-    Serial.print(F("enter command: ")); 
-  }
+bool initSerial(){
+  Serial.setTimeout(20);
+  Serial.println(F("I am otto, version 0.0.1"));
+  Serial.readStringUntil('\n'); // Clear serial buffer
+  Serial.println(F(".0 boot_ok"));
 }
 
 int apiVersion = 2;
