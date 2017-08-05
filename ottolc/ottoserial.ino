@@ -170,7 +170,7 @@ void doCommand(String line){
     replPrintServos();
   }else if(command=="e"){
     Serial.println(F("echo? "));
-    sensorfoo();
+    _doping();
   }else if(command==F("reset")){
     void(* resetFunc) (void) = 0;
     resetFunc();

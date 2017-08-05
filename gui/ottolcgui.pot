@@ -1,0 +1,117 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2017-08-05 15:49+CEST\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
+"Generated-By: pygettext.py 1.5\n"
+
+
+#: gui/anim.py:15
+msgid "left leg"
+msgstr ""
+
+#: gui/anim.py:21
+msgid "right leg"
+msgstr ""
+
+#: gui/anim.py:27
+msgid "left foot"
+msgstr ""
+
+#: gui/anim.py:33
+msgid "right foot"
+msgstr ""
+
+#: gui/anim.py:38
+msgid "time"
+msgstr ""
+
+#: gui/anim.py:44
+msgid "Reset servos"
+msgstr ""
+
+#: gui/anim.py:50
+msgid "add frame"
+msgstr ""
+
+#: gui/anim.py:56
+msgid "play animation"
+msgstr ""
+
+#: gui/anim.py:62
+msgid "play selection"
+msgstr ""
+
+#: gui/anim.py:68
+msgid "delete selection"
+msgstr ""
+
+#: gui/anim.py:75
+msgid "save"
+msgstr ""
+
+#: gui/anim.py:81
+msgid "load"
+msgstr ""
+
+#: gui/anim.py:87
+msgid "save to clipboard"
+msgstr ""
+
+#: gui/anim.py:93
+msgid "load from clipboard"
+msgstr ""
+
+#: gui/app.py:45
+msgid "animation & movement"
+msgstr ""
+
+#: gui/app.py:46
+msgid "bot configuration"
+msgstr ""
+
+#: gui/app.py:47
+msgid "help & info"
+msgstr ""
+
+#: gui/app.py:84
+msgid "Got Firmware version %s and API Version %s, please update the gui and or ottobot"
+msgstr ""
+
+#: gui/app.py:84
+msgid "OttO Firmware error"
+msgstr ""
+
+#: gui/config.py:12
+msgid "enable servos"
+msgstr ""
+
+#: gui/config.py:19
+msgid "save trim values"
+msgstr ""
+
+#: gui/config.py:25
+msgid "test trim values"
+msgstr ""
+
+#: gui/config.py:31
+msgid "reset trim values"
+msgstr ""
+
+#: gui/config.py:37
+msgid "get ottolc info"
+msgstr ""
+
+#: gui/info.py:10
+msgid "Open help page"
+msgstr ""
+

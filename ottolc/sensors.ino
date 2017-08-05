@@ -26,13 +26,15 @@ void initSensors(){
 
 void obstacleAvoidance(){
 	signed long now = millis();
+	if(!_collison_enabled)
+		return;
 	if(_canping){
 		if((now-lastping)>50)
-			sensorfoo();
+			_doping();
 	}else{
 		if((now-lastping)>100){
 			lastping = millis();
-			sensorfoo();
+			_doping();
 		}
 	}
 }
@@ -57,7 +59,7 @@ void echoCb(){
 	}
 }
 
-void sensorfoo(){
+void _doping(){
 	_canping = false;
 	sonar.ping_timer(echoCb);
 	lastping = millis();

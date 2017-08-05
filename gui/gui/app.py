@@ -6,16 +6,22 @@ import serial
 from datetime import datetime, timedelta
 from tkinter.filedialog import asksaveasfilename, askopenfilename
 import json
+import webbrowser
 from .anim import Animtab
 from .config import Configtab
+from .info import Infotab
 import serial.tools.list_ports
 
 import re
-
+import gettext
+de = gettext.translation('ottolcgui', localedir='locale', languages=['de_DE'])
+_ = de.gettext
 class App():
+    expected_firmware = 3
+    expected_api = 3
     def __init__(self, master, serialDevice=None):
         self.master = master
-        master.wm_title("OttO-LC V 1.0.0")
+        master.wm_title("OttO-LC V 1.%s.%s"%(self.expected_firmware, self.expected_api))
 
 
         if not serialDevice:
@@ -34,15 +40,16 @@ class App():
 
         animframe = ttk.Frame(tabs)
         configframe = ttk.Frame(tabs)
-        logframe = ttk.Frame(tabs)
+        infoframe = ttk.Frame(tabs)
 
-        tabs.add(animframe, text='animation & movement')
-        tabs.add(configframe, text='bot config')
-        tabs.add(logframe, text='log')
+        tabs.add(animframe, text=_('animation & movement'))
+        tabs.add(configframe, text=_('bot configuration'))
+        tabs.add(infoframe, text=_('help & info'))
         tabs.pack()
 
         self.animwidget = Animtab(animframe, self)
         self.configwidget = Configtab(configframe, self)
+        self.infowidget = Infotab(infoframe, self)
 
         self.nosend = False
         self.mov(None)
@@ -73,8 +80,9 @@ class App():
         except Exception as e:
             raise
         fwvers, apivers = self.getInfo()
-        if (fwvers!= 2)or(apivers!=3):
-            messagebox.showerror("OttO Firmware error", "Got Firmware version %s and API Version %s, please update the gui and or ottobot"%(fwvers, apivers))
+        if (fwvers!= self.expected_firmware)or(apivers!=self.expected_api):
+            messagebox.showerror(_("OttO Firmware error"), _("Got Firmware version %s and API Version %s, please update the gui and or ottobot")%(fwvers, apivers))
+            self.openhelp()
             self.master.destroy()
             raise Exception("Got Firmware version %s and API Version %s"%(fwvers, apivers))
 
@@ -184,4 +192,5 @@ class App():
         print("Compile date: %s" % (posInt[2:]))
         return (int(posInt[0]), int(posInt[1]))
         
-    # def log
+    def openhelp(self):
+        webbrowser.open_new("http://bckspc.de/otto?fw=%s&api=%s"%(self.expected_firmware, self.expected_api))

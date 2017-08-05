@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2017-08-05 15:49+CEST\n"
+"PO-Revision-Date: 2017-08-05 15:52+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.0.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: gui/anim.py:15
+msgid "left leg"
+msgstr "Linkes Bein"
+
+#: gui/anim.py:21
+msgid "right leg"
+msgstr "Rechtes Bein"
+
+#: gui/anim.py:27
+msgid "left foot"
+msgstr "Linker Fuß"
+
+#: gui/anim.py:33
+msgid "right foot"
+msgstr "Rechter Fuß"
+
+#: gui/anim.py:38
+msgid "time"
+msgstr "Dauer"
+
+#: gui/anim.py:44
+msgid "Reset servos"
+msgstr "Servos zurücksetzen"
+
+#: gui/anim.py:50
+msgid "add frame"
+msgstr ""
+
+#: gui/anim.py:56
+msgid "play animation"
+msgstr "Animation abspielen"
+
+#: gui/anim.py:62
+msgid "play selection"
+msgstr "Auswahl Abspielen"
+
+#: gui/anim.py:68
+msgid "delete selection"
+msgstr "Auswahl löschen"
+
+#: gui/anim.py:75
+msgid "save"
+msgstr "Speichern"
+
+#: gui/anim.py:81
+msgid "load"
+msgstr "Laden"
+
+#: gui/anim.py:87
+msgid "save to clipboard"
+msgstr "In der Zwischenablage Speichern"
+
+#: gui/anim.py:93
+msgid "load from clipboard"
+msgstr "Aus der Zwischenablage laden"
+
+#: gui/app.py:45
+msgid "animation & movement"
+msgstr "Animationen und Bewegung"
+
+#: gui/app.py:46
+msgid "bot configuration"
+msgstr "Einstellungen"
+
+#: gui/app.py:47
+msgid "help & info"
+msgstr "Hilfe und Informationen"
+
+#: gui/app.py:84
+msgid ""
+"Got Firmware version %s and API Version %s, please update the gui and or "
+"ottobot"
+msgstr ""
+"Falsche Firmwareversion: %s und API Version %s. Bitte GUI und OttO "
+"updaten."
+
+#: gui/app.py:84
+msgid "OttO Firmware error"
+msgstr "OttO Fehler"
+
+#: gui/config.py:12
+msgid "enable servos"
+msgstr "Servos anschalten"
+
+#: gui/config.py:19
+msgid "save trim values"
+msgstr ""
+
+#: gui/config.py:25
+msgid "test trim values"
+msgstr ""
+
+#: gui/config.py:31
+msgid "reset trim values"
+msgstr ""
+
+#: gui/config.py:37
+msgid "get ottolc info"
+msgstr ""
+
+#: gui/info.py:10
+msgid "Open help page"
+msgstr "Hilfeseite öffnen"

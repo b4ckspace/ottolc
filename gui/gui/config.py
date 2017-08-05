@@ -1,4 +1,7 @@
 import tkinter
+import gettext
+de = gettext.translation('ottolcgui', localedir='locale', languages=['de_DE'])
+_ = de.gettext
 class Configtab():
     def __init__(self, master, app):
         self.app = app
@@ -6,32 +9,32 @@ class Configtab():
         self.servocb = tkinter.Checkbutton(
             master,
             variable=self.cbvar,
-            text="enable servos",
+            text=_("enable servos"),
             command=self.servos)
         self.servocb.grid(row=0,column=0)
         self.servocb.select()
 
         tkinter.Button(
             master,
-            text="Save Trim",
+            text=_("save trim values"),
             command=self.app.saveTrim).grid(
             row=3,
             column=0)
         tkinter.Button(
             master,
-            text="Test Trim",
+            text=_("test trim values"),
             command=self.app.testTrim).grid(
             row=4,
             column=0)
         tkinter.Button(
             master,
-            text="Reset Trim",
+            text=_("reset trim values"),
             command=self.app.resetTrim).grid(
             row=5,
             column=0)
         tkinter.Button(
             master,
-            text="Get OttO-LC Info",
+            text=_("get ottolc info"),
             command=self.app.getInfo).grid(
             row=0,
             column=1)

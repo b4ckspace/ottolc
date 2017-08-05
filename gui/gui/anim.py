@@ -10,102 +10,100 @@ class Animtab():
     def __init__(self, master, app):
         self.app = app
 
-        frame = tkinter.Frame(master)
-
-
         self.ll = tkinter.Scale(master, from_=-90, to=90,
                                 resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="left leg")
+                                orient=tkinter.HORIZONTAL, label=_("left leg"))
         self.ll.set(0)
         self.ll.grid(row=0, column=0)
 
         self.rl = tkinter.Scale(master, from_=-90, to=90,
                                 resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="right leg")
+                                orient=tkinter.HORIZONTAL, label=_("right leg"))
         self.rl.set(0)
         self.rl.grid(row=0, column=1)
         
         self.lf = tkinter.Scale(master, from_=-90, to=90,
                                 resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="left foot")
+                                orient=tkinter.HORIZONTAL, label=_("left foot"))
         self.lf.set(0)
         self.lf.grid(row=1, column=0)
 
         self.rf = tkinter.Scale(master, from_=-90, to=90,
                                 resolution=1, length=200, command=self.app.mov,
-                                orient=tkinter.HORIZONTAL, label="right foot")
+                                orient=tkinter.HORIZONTAL, label=_("right foot"))
         self.rf.set(0)
         self.rf.grid(row=1, column=1)
 
         self.ts = tkinter.Scale(master, from_=1, to=1000, length=200,
-                                orient=tkinter.VERTICAL, label="time")
+                                orient=tkinter.VERTICAL, label=_("time"))
         self.ts.set(500)
         self.ts.grid(row=0, column=2, rowspan=2)
 
         tkinter.Button(
             master,
-            text="Reset",
+            text=_("Reset servos"),
             command=self.resetServos).grid(
             row=2,
             column=0)
         tkinter.Button(
             master,
-            text="add frame",
+            text=_("add frame"),
             command=self.addframe).grid(
             row=2,
             column=2)
         tkinter.Button(
             master,
-            text="play anim",
+            text=_("play animation"),
             command=self.playanim).grid(
             row=1,
             column=3)
         tkinter.Button(
             master,
-            text="play selection",
+            text=_("play selection"),
             command=self.playanimsel).grid(
             row=2,
             column=3)
         tkinter.Button(
             master,
-            text="delete selection",
+            text=_("delete selection"),
             command=self.deleteselection).grid(
             row=0,
             column=3)
 
         tkinter.Button(
             master,
-            text="save",
+            text=_("save"),
             command=self.savefile).grid(
             row=2,
             column=4)
         tkinter.Button(
             master,
-            text="load",
+            text=_("load"),
             command=self.loadfile).grid(
             row=3,
             column=4)
         tkinter.Button(
             master,
-            text="save to clipboard",
+            text=_("save to clipboard"),
             command=self.saveclipboard).grid(
             row=4,
             column=4)
         tkinter.Button(
             master,
-            text="load from clipboard",
+            text=_("load from clipboard"),
             command=self.loadclipboard).grid(
             row=5,
             column=4)
-
-        funlist = list(map(lambda x: x.decode('utf-8'), self.app._sendcmd("! supportedanims\n").split(b' ')))
+        rawlist = self.app._sendcmd("! supportedanims\n")
+        funlist =[]
+        if rawlist:
+            funlist = list(map(lambda x: x.decode('utf-8'), rawlist.split(b' ')))
         if len(funlist)>0:
             var = tkinter.StringVar(master)
             var.set(funlist[0])
             self.selected_fun = var
-            w = tkinter.OptionMenu(master, var, *funlist)
-            w.grid(row=3, column=2)
-            tkinter.Button(
+            self.funwidget = tkinter.OptionMenu(master, var, *funlist).grid(row=3, column=2)
+            self.funbutton = tkinter.Button(
                 master,
                 text="add animation as step",
                 command=self.addfun).grid(
