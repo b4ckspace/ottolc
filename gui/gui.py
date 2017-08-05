@@ -4,7 +4,6 @@ import gettext
 de = gettext.translation('ottolcgui', localedir='locale', languages=['de_DE'])
 de.install()
 _ = gettext.gettext
-print(_("Open help page"))
 
 from gui.app import App
 if __name__ == "__main__":

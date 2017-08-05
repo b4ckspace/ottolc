@@ -17,11 +17,12 @@ import gettext
 de = gettext.translation('ottolcgui', localedir='locale', languages=['de_DE'])
 _ = de.gettext
 class App():
-    expected_firmware = 3
+    expected_firmware = 2
     expected_api = 3
+    gui_patchlevel=100
     def __init__(self, master, serialDevice=None):
         self.master = master
-        master.wm_title("OttO-LC V 1.%s.%s"%(self.expected_firmware, self.expected_api))
+        master.wm_title("OttO-LC V 1.%s.%s.%s"%(self.expected_firmware, self.expected_api, self.gui_patchlevel))
 
 
         if not serialDevice:
@@ -81,7 +82,7 @@ class App():
             raise
         fwvers, apivers = self.getInfo()
         if (fwvers!= self.expected_firmware)or(apivers!=self.expected_api):
-            messagebox.showerror(_("OttO Firmware error"), _("Got Firmware version %s and API Version %s, please update the gui and or ottobot")%(fwvers, apivers))
+            messagebox.showerror(_("OttO Firmware error (1.%s.%s.%s)"%(self.expected_firmware, self.expected_api, self.gui_patchlevel)), _("Got Firmware version %s and API Version %s, please update the gui and or ottobot")%(fwvers, apivers))
             self.openhelp()
             self.master.destroy()
             raise Exception("Got Firmware version %s and API Version %s"%(fwvers, apivers))
@@ -193,4 +194,4 @@ class App():
         return (int(posInt[0]), int(posInt[1]))
         
     def openhelp(self):
-        webbrowser.open_new("http://bckspc.de/otto?fw=%s&api=%s"%(self.expected_firmware, self.expected_api))
+        webbrowser.open_new("http://bckspc.de/otto?fw=%s&api=%s&patchlevel=%s"%(self.expected_firmware, self.expected_api, self.gui_patchlevel))
