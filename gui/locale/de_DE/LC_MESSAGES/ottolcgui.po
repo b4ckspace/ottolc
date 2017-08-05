@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2017-08-05 15:49+CEST\n"
-"PO-Revision-Date: 2017-08-05 15:52+0200\n"
+"PO-Revision-Date: 2017-08-05 15:55+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -43,7 +43,7 @@ msgstr "Servos zurücksetzen"
 
 #: gui/anim.py:50
 msgid "add frame"
-msgstr ""
+msgstr "Bewegung hinzufügen"
 
 #: gui/anim.py:56
 msgid "play animation"
