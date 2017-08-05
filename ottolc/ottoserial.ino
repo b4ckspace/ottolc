@@ -7,8 +7,8 @@ bool initSerial(){
   Serial.println(F(".0 boot_ok"));
 }
 
-int apiVersion = 2;
-int fwVersion = 1;
+int apiVersion = 3;
+int fwVersion = 2;
 
 void playTone(String args){
   int myTone;

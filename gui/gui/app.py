@@ -1,6 +1,7 @@
 import tkinter
 # import tkinter.ttk
 from tkinter import ttk
+from tkinter import messagebox
 import serial
 from datetime import datetime, timedelta
 from tkinter.filedialog import asksaveasfilename, askopenfilename
@@ -71,6 +72,12 @@ class App():
                     break
         except Exception as e:
             raise
+        fwvers, apivers = self.getInfo()
+        if (fwvers!= 2)or(apivers!=3):
+            messagebox.showerror("OttO Firmware error", "Got Firmware version %s and API Version %s, please update the gui and or ottobot"%(fwvers, apivers))
+            self.master.destroy()
+            raise Exception("Got Firmware version %s and API Version %s"%(fwvers, apivers))
+
 
 
     def calcabspos(self,pos):
@@ -175,5 +182,6 @@ class App():
         print("Firmware Version: %s" % (posInt[0]))
         print("API Version: %s" % (posInt[1]))
         print("Compile date: %s" % (posInt[2:]))
+        return (int(posInt[0]), int(posInt[1]))
         
     # def log
