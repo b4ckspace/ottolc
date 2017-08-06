@@ -95,16 +95,20 @@ prependAnimationFrame(150, 115, 90, 90, 102);
 prependAnimationFrame(90, 120, 90, 90, 102);
 }
 void randomAction(void*){
-    long num = random(0, 10);
+    long num = random(0, 14);
     prependAnimationCallback(randomAction);
     switch(num){
-        case 0:case 7:case 8:case 9:prependAnimationCallback(basic_step);break;
+        case 0:case 11:case 12:case 13:prependAnimationCallback(basic_step);break;
         case 1:prependAnimationCallback(basic_back);break;
-        case 2:prependAnimationCallback(kneel_down);break;
+        case 2:prependAnimationCallback(sitdown);break;
         case 3:prependAnimationCallback(moonwalk_r);break;
         case 4:prependAnimationCallback(turnleft);break;
         case 5:prependAnimationCallback(turnright);break;
         case 6:prependAnimationCallback(huffing);break;
+        // case 7:prependAnimationCallback(acrobatic1);break;
+        case 8:prependAnimationCallback(acrobatic2);break;
+        // case 9:prependAnimationCallback(ballet);break;
+        case 10:prependAnimationCallback(wink);break;
     }
 }
 
@@ -124,4 +128,52 @@ void walk_back_collision(){
     prependAnimationCallback(basic_back);
     prependAnimationCallback(basic_back);
     prependAnimationFrame(90, 90, 90, 90, 400);
+}
+
+
+void acrobatic1(void*){
+prependAnimationFrame(89, 90, 91, 89, 407);
+prependAnimationFrame(90, 119, 90, 90, 1000);
+prependAnimationFrame(42, 135, 90, 90, 1000);
+prependAnimationFrame(90, 119, 90, 90, 1000);
+prependAnimationFrame(42, 135, 90, 90, 1000);
+prependAnimationFrame(155, 125, 90, 90, 209);
+prependAnimationFrame(155, 125, 90, 90, 160);
+}
+
+void acrobatic2(void*){
+prependAnimationFrame(90, 90, 90, 90, 232);
+prependAnimationFrame(151, 125, 127, 127, 100);
+prependAnimationFrame(0, 125, 127, 127, 100);
+prependAnimationFrame(155, 121, 127, 127, 84);
+prependAnimationFrame(155, 121, 127, 127, 700);
+prependAnimationFrame(155, 125, 90, 90, 160);
+}
+
+void ballet(void*){
+prependAnimationFrame(90, 90, 90, 90, 2500);
+prependAnimationFrame(150, 30, 90, 90, 1500);
+prependAnimationFrame(150, 30, 90, 90, 2500);
+}
+
+void sitdown(void*){
+prependAnimationFrame(90, 90, 90, 90, 500);
+prependAnimationFrame(0, 180, 143, 37, 1000);
+prependAnimationFrame(0, 180, 143, 37, 1000);
+prependAnimationFrame(0, 180, 143, 37, 1000);
+prependAnimationFrame(0, 180, 143, 37, 300);
+prependAnimationFrame(0, 180, 120, 60, 200);
+prependAnimationFrame(30, 150, 90, 90, 500);
+}
+
+void wink(void*){
+prependAnimationFrame(90, 90, 90, 90, 600);
+prependAnimationFrame(155, 125, 90, 90, 250);
+prependAnimationFrame(25, 125, 90, 90, 250);
+prependAnimationFrame(155, 125, 90, 90, 250);
+prependAnimationFrame(25, 125, 90, 90, 250);
+prependAnimationFrame(155, 125, 90, 90, 250);
+prependAnimationFrame(25, 125, 90, 90, 250);
+prependAnimationFrame(155, 125, 90, 90, 400);
+prependAnimationFrame(155, 125, 90, 90, 165);
 }

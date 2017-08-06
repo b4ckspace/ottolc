@@ -288,7 +288,7 @@ void apiCommand(String line){
       startAnimation();
     // the gui can use this to query the build in functions that can be used as animation callback
     }else if(command==F("supportedanims")){
-      result = String(F("basic_step basic_back kneel_down moonwalk_r huffing turnleft turnright"));
+      result = String(F("basic_step basic_back kneel_down moonwalk_r huffing turnleft turnright acrobatic1 acrobatic2 ballet sitdown wink"));
 
     // push a callback instead of a keyframe
     }else if(command==F("pushcallback")){
@@ -316,6 +316,21 @@ void apiCommand(String line){
       }else if(args==F("turnright")){
         found=true;
         addAnimationCallback(turnright);
+      }else if(args==F("acrobatic1")){
+        found=true;
+        addAnimationCallback(acrobatic1);
+      }else if(args==F("acrobatic2")){
+        found=true;
+        addAnimationCallback(acrobatic2);
+      }else if(args==F("ballet")){
+        found=true;
+        addAnimationCallback(ballet);
+      }else if(args==F("sitdown")){
+        found=true;
+        addAnimationCallback(sitdown);
+      }else if(args==F("wink")){
+        found=true;
+        addAnimationCallback(wink);
       }
       if(!found){
         result = "no callback with that name found";
