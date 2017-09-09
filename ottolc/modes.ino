@@ -31,18 +31,21 @@ void modeinit(){
 	switch(_currentmode){
 		case 0:
 			playMelodyPart(0,8,9);
+			delay(200);
 			enableCollision();
 			addAnimationCallback(keep_walking);
 			startAnimation();
 		break;
 		case 1:
 			playMelodyPart(0,8,11);
+      delay(200);
 			disableCollision();
 			addAnimationCallback(keep_walking_back);
 			startAnimation();
 			break;
 		case 2:
 			playMelodyPart(0,8,13);
+      delay(200);
 			enableCollision();
 			addAnimationCallback(randomAction);
 			startAnimation();
