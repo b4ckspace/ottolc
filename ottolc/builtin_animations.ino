@@ -34,7 +34,7 @@ prependAnimationFrame(145, 110, 107, 107, 200);
 prependAnimationFrame(155, 110, 90, 107, 200);
 prependAnimationFrame(155, 119, 90, 90, 165);
 prependAnimationFrame(90, 90, 90, 90, 80);
-prependAnimationFrame(90, 90, 90, 90, 1000);
+//prependAnimationFrame(90, 90, 90, 90, 1000);
 }
 
 void kneel_down(void*){
