@@ -5,8 +5,8 @@
 bool addAnimationCallback(AnimationCallback::AnimFun callback);
 
 Bounce button;
-int _currentmode = 3;
-int _nummodes = 4;
+int _currentmode = 0;
+int _nummodes = 3;
 void initModes(){
 	pinMode(6,INPUT_PULLUP);
 	button.attach(6);
@@ -29,6 +29,23 @@ void modeinit(){
 	resetAnimation();
 	resetServos();
 	switch(_currentmode){
+    case 0:
+      playMelodyPart(0,8,9);
+      disableCollision();break;
+    case 1:
+      playMelodyPart(0,8,11);
+      delay(200);
+      enableCollision();
+      addAnimationCallback(randomAction);
+      startAnimation();
+      break;
+    case 2:
+      playMelodyPart(0,8,13);
+      delay(200);
+      enableCollision();
+      addAnimationCallback(keep_walking);
+      startAnimation();
+    /*
 		case 0:
 			playMelodyPart(0,8,9);
 			delay(200);
@@ -52,6 +69,7 @@ void modeinit(){
 			break;
 		case 3:
 			disableCollision();break;
+     */
 	}
 	//insert switch case for modes here
 }
