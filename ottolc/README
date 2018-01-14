@@ -1,0 +1,15 @@
+dependecies:
+NewPing (available via the arduino library manager)
+  v1.8:
+    https://bitbucket.org/teckel12/arduino-new-ping/downloads/NewPing_v1.8.zip
+  Homepage:
+    https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home
+
+Bounce2:(available via the arduino library manager)
+  v2.1 
+  Homepage:
+    https://github.com/thomasfredericks/Bounce2
+
+Oscillator:
+  no official version anymore, we should probably get rid of this dependency.
+  https://github.com/bq/zowiLibs/tree/910ac1b6ffb7a6447e9817512860adc96e2fecb2/arduino%20libraries/Oscillator
