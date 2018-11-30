@@ -1,4 +1,4 @@
-/* This is the main project file for otto lc, the ottobot fork of the backspace ev, the laser cut version
+/* This is the main project file for otto lc, the ottobot fork of the backspace ev, the laser cut version.
 
 */
 
